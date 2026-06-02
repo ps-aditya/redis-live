@@ -1,8 +1,11 @@
-# Redis-State-Explorer
+# Redis State Explorer
 
 An open-source lab for all things Redis.
-
+<p align="center">
 <img width="250" height="250" alt="RSE V1" src="https://github.com/user-attachments/assets/01827e14-3718-4b37-b37e-47bb1db97f39" />
+</p>
+
+---
 
 ## What is Redis State Explorer?
 
