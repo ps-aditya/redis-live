@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Redis State Explorer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ffb4ab",
+                        "text-secondary": "#888888",
+                        "on-secondary": "#412d00",
+                        "surface-tint": "#00e479",
+                        "surface-container-lowest": "#0e0e0e",
+                        "bg-elevated": "#1E1E1E",
+                        "text-primary": "#F0F0F0",
+                        "on-tertiary-fixed-variant": "#930010",
+                        "outline": "#849585",
+                        "surface-container-high": "#2a2a2a",
+                        "accent-info": "#4DA6FF",
+                        "text-muted": "#555555",
+                        "background": "#131313",
+                        "surface-variant": "#353534",
+                        "on-tertiary": "#680008",
+                        "surface-bright": "#3a3939",
+                        "secondary-fixed-dim": "#ffba20",
+                        "secondary": "#ffdb9d",
+                        "bg-panel": "#111111",
+                        "on-tertiary-fixed": "#410003",
+                        "inverse-surface": "#e5e2e1",
+                        "surface-dim": "#131313",
+                        "text-terminal": "#A8FF78",
+                        "inverse-on-surface": "#313030",
+                        "on-error-container": "#ffdad6",
+                        "bg-surface": "#181818",
+                        "surface-container": "#201f1f",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#5e4200",
+                        "surface-container-low": "#1c1b1b",
+                        "outline-variant": "#3b4b3d",
+                        "on-error": "#690005",
+                        "primary": "#f1ffef",
+                        "surface-container-highest": "#353534",
+                        "primary-fixed-dim": "#00e479",
+                        "on-primary": "#003919",
+                        "on-secondary-fixed": "#271900",
+                        "tertiary-fixed": "#ffdad6",
+                        "on-secondary-container": "#6b4b00",
+                        "primary-container": "#00ff88",
+                        "border-accent": "#3A3A3A",
+                        "tertiary-container": "#ffd5d1",
+                        "on-surface": "#e5e2e1",
+                        "inverse-primary": "#006d37",
+                        "secondary-container": "#feb700",
+                        "on-surface-variant": "#b9cbb9",
+                        "secondary-fixed": "#ffdea8",
+                        "primary-fixed": "#60ff99",
+                        "on-tertiary-container": "#c6031a",
+                        "on-primary-fixed-variant": "#005228",
+                        "on-primary-container": "#007139",
+                        "tertiary": "#fffaf9",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-background": "#e5e2e1",
+                        "surface": "#131313",
+                        "border-default": "#2A2A2A",
+                        "on-primary-fixed": "#00210c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "32px",
+                        "base-unit": "4px",
+                        "utility-height": "48px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "nav-height": "56px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["IBM Plex Sans"],
+                        "mono-data-sm": ["JetBrains Mono"],
+                        "headline-xl": ["IBM Plex Sans"],
+                        "headline-lg": ["IBM Plex Sans"],
+                        "label-caps": ["IBM Plex Sans"],
+                        "mono-data-lg": ["JetBrains Mono"],
+                        "headline-md": ["IBM Plex Sans"],
+                        "body-default": ["IBM Plex Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "mono-data-sm": ["13px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "headline-xl": ["48px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.25", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "mono-data-lg": ["15px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-default": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(42, 42, 42, 0.5) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(42, 42, 42, 0.5) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-text-primary font-body-default text-body-default min-h-screen flex flex-col antialiased selection:bg-primary-container selection:text-black">
+<!-- TopNavBar (From JSON) -->
+<nav class="fixed w-full top-0 border-b border-border-default z-50 bg-bg-panel dark:bg-bg-panel flex justify-between items-center h-nav-height px-margin-desktop">
+<div class="flex items-center gap-8">
+<div class="font-headline-lg text-headline-lg font-bold text-primary dark:text-primary tracking-tighter">
+                RSE
+            </div>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-text-secondary dark:text-text-secondary hover:text-primary dark:hover:text-primary transition-colors duration-200 font-label-caps text-label-caps" href="#">Documentation</a>
+<a class="text-text-secondary dark:text-text-secondary hover:text-primary dark:hover:text-primary transition-colors duration-200 font-label-caps text-label-caps" href="#">GitHub</a>
+</div>
+</div>
+<div>
+<button class="bg-primary-container text-black font-label-caps text-label-caps px-4 py-2 rounded-DEFAULT hover:opacity-90 transition-opacity">
+                Launch Lab
+            </button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-nav-height flex flex-col relative overflow-hidden">
+<!-- Subtle Ambient Background Grid -->
+<div class="absolute inset-0 grid-bg opacity-20 pointer-events-none z-0"></div>
+<!-- Hero Section -->
+<section class="relative z-10 flex flex-col items-center justify-center text-center px-margin-mobile md:px-margin-desktop py-24 md:py-32 flex-grow">
+<h1 class="font-headline-xl text-headline-xl tracking-tight mb-6 text-primary">
+                Redis State Explorer
+            </h1>
+<p class="font-mono-data-lg text-mono-data-lg text-text-terminal mb-12 max-w-2xl bg-black px-4 py-2 border border-border-default rounded">
+                &gt; Observe Redis. Break Redis. Understand Redis.<span class="animate-pulse">_</span>
+</p>
+<button class="bg-primary-container text-black font-label-caps text-label-caps px-8 py-4 rounded-DEFAULT hover:bg-[#60ff99] transition-colors border border-transparent shadow-[0_0_15px_rgba(0,255,136,0.2)]">
+                Launch Lab
+            </button>
+</section>
+<!-- Feature Grid -->
+<section class="relative z-10 px-margin-mobile md:px-margin-desktop py-16 bg-bg-panel border-t border-b border-border-default">
+<div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Card 1 -->
+<div class="bg-bg-surface border border-border-default rounded flex flex-col p-6 hover:border-primary-container transition-colors group">
+<div class="mb-4 text-text-secondary group-hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">build</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2 text-primary">Break &amp; Fix Lab</h3>
+<p class="font-body-default text-body-default text-text-secondary">
+                        Safely inject latency, simulate partitions, and monitor how your data structures react under stress in a sandboxed environment.
+                    </p>
+</div>
+<!-- Card 2 -->
+<div class="bg-bg-surface border border-border-default rounded flex flex-col p-6 hover:border-primary-container transition-colors group">
+<div class="mb-4 text-text-secondary group-hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">timeline</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2 text-primary">Real-Time State Delta</h3>
+<p class="font-body-default text-body-default text-text-secondary">
+                        Track memory allocations and key mutations byte-by-byte as they happen. Zero ambiguity visual diffs of state changes.
+                    </p>
+</div>
+<!-- Card 3 -->
+<div class="bg-bg-surface border border-border-default rounded flex flex-col p-6 hover:border-primary-container transition-colors group">
+<div class="mb-4 text-text-secondary group-hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_tree</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2 text-primary">Structural Visualizer</h3>
+<p class="font-body-default text-body-default text-text-secondary">
+                        Inspect complex Hashes, Sets, and Sorted Sets as graphical node structures. Understand deep nesting at a glance.
+                    </p>
+</div>
+</div>
+</section>
+<!-- Workflow Pipeline -->
+<section class="relative z-10 px-margin-mobile md:px-margin-desktop py-24">
+<div class="max-w-5xl mx-auto">
+<div class="font-label-caps text-label-caps text-text-muted mb-8 text-center uppercase tracking-widest">
+                    Execution Pipeline
+                </div>
+<div class="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0 font-mono-data-sm text-mono-data-sm">
+<div class="flex flex-col items-center gap-2 text-text-secondary">
+<div class="w-12 h-12 rounded border border-border-default bg-bg-surface flex items-center justify-center">
+<span class="material-symbols-outlined text-text-terminal">terminal</span>
+</div>
+<span>Command Input</span>
+</div>
+<div class="hidden md:block flex-grow h-[1px] bg-border-default mx-4 relative">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 border-t border-r border-border-default rotate-45"></div>
+</div>
+<div class="md:hidden text-border-default"><span class="material-symbols-outlined">arrow_downward</span></div>
+<div class="flex flex-col items-center gap-2 text-text-secondary">
+<div class="w-12 h-12 rounded border border-border-default bg-bg-surface flex items-center justify-center">
+<span class="material-symbols-outlined text-accent-info">difference</span>
+</div>
+<span>State Delta</span>
+</div>
+<div class="hidden md:block flex-grow h-[1px] bg-border-default mx-4 relative">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 border-t border-r border-border-default rotate-45"></div>
+</div>
+<div class="md:hidden text-border-default"><span class="material-symbols-outlined">arrow_downward</span></div>
+<div class="flex flex-col items-center gap-2 text-text-secondary">
+<div class="w-12 h-12 rounded border border-border-default bg-bg-surface flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary-container">visibility</span>
+</div>
+<span>Visualization</span>
+</div>
+<div class="hidden md:block flex-grow h-[1px] bg-border-default mx-4 relative">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 border-t border-r border-border-default rotate-45"></div>
+</div>
+<div class="md:hidden text-border-default"><span class="material-symbols-outlined">arrow_downward</span></div>
+<div class="flex flex-col items-center gap-2 text-primary-container">
+<div class="w-12 h-12 rounded border border-primary-container bg-[#00210c] flex items-center justify-center shadow-[0_0_10px_rgba(0,255,136,0.1)]">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<span>Mastery</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Redis State Explorer - Lab Interface</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ffb4ab",
+                        "text-secondary": "#888888",
+                        "on-secondary": "#412d00",
+                        "surface-tint": "#00e479",
+                        "surface-container-lowest": "#0e0e0e",
+                        "bg-elevated": "#1E1E1E",
+                        "text-primary": "#F0F0F0",
+                        "on-tertiary-fixed-variant": "#930010",
+                        "outline": "#849585",
+                        "surface-container-high": "#2a2a2a",
+                        "accent-info": "#4DA6FF",
+                        "text-muted": "#555555",
+                        "background": "#131313",
+                        "surface-variant": "#353534",
+                        "on-tertiary": "#680008",
+                        "surface-bright": "#3a3939",
+                        "secondary-fixed-dim": "#ffba20",
+                        "secondary": "#ffdb9d",
+                        "bg-panel": "#111111",
+                        "on-tertiary-fixed": "#410003",
+                        "inverse-surface": "#e5e2e1",
+                        "surface-dim": "#131313",
+                        "text-terminal": "#A8FF78",
+                        "inverse-on-surface": "#313030",
+                        "on-error-container": "#ffdad6",
+                        "bg-surface": "#181818",
+                        "surface-container": "#201f1f",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#5e4200",
+                        "surface-container-low": "#1c1b1b",
+                        "outline-variant": "#3b4b3d",
+                        "on-error": "#690005",
+                        "primary": "#f1ffef",
+                        "surface-container-highest": "#353534",
+                        "primary-fixed-dim": "#00e479",
+                        "on-primary": "#003919",
+                        "on-secondary-fixed": "#271900",
+                        "tertiary-fixed": "#ffdad6",
+                        "on-secondary-container": "#6b4b00",
+                        "primary-container": "#00ff88",
+                        "border-accent": "#3A3A3A",
+                        "tertiary-container": "#ffd5d1",
+                        "on-surface": "#e5e2e1",
+                        "inverse-primary": "#006d37",
+                        "secondary-container": "#feb700",
+                        "on-surface-variant": "#b9cbb9",
+                        "secondary-fixed": "#ffdea8",
+                        "primary-fixed": "#60ff99",
+                        "on-tertiary-container": "#c6031a",
+                        "on-primary-fixed-variant": "#005228",
+                        "on-primary-container": "#007139",
+                        "tertiary": "#fffaf9",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-background": "#e5e2e1",
+                        "surface": "#131313",
+                        "border-default": "#2A2A2A",
+                        "on-primary-fixed": "#00210c",
+                        "nuke-red": "#FF3B3B",
+                        "ttl-warning": "#FFB800",
+                        "vscode-nav": "#333333",
+                        "vscode-panel": "#252526",
+                        "vscode-header": "#2D2D30",
+                        "vscode-term": "#0A0A0A",
+                        "crimson": "#DC143C",
+                        "badge-bg": "#37373D",
+                        "syn-purple": "#C586C0",
+                        "syn-blue": "#569CD6",
+                        "syn-orange": "#CE9178",
+                        "syn-green": "#B5CEA8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "32px",
+                        "base-unit": "4px",
+                        "utility-height": "48px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "nav-height": "56px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["IBM Plex Sans"],
+                        "mono-data-sm": ["JetBrains Mono"],
+                        "headline-xl": ["IBM Plex Sans"],
+                        "headline-lg": ["IBM Plex Sans"],
+                        "label-caps": ["IBM Plex Sans"],
+                        "mono-data-lg": ["JetBrains Mono"],
+                        "headline-md": ["IBM Plex Sans"],
+                        "body-default": ["IBM Plex Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "mono-data-sm": ["13px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.25", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "mono-data-lg": ["15px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-default": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #111111;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #2A2A2A;
+            border-radius: 2px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #3A3A3A;
+        }
+        .terminal-bg { background-color: #0A0A0A; }
+        .row-pulse-green { animation: pulseGreen 1.5s ease-out; }
+        .row-pulse-amber { animation: pulseAmber 1.5s ease-out; }
+        .row-pulse-red { animation: pulseRed 1.5s ease-out; }
+        
+        @keyframes pulseGreen {
+            0% { background-color: rgba(220, 20, 60, 0.2); }
+            100% { background-color: transparent; }
+        }
+        @keyframes pulseAmber {
+            0% { background-color: rgba(255, 184, 0, 0.2); }
+            100% { background-color: transparent; }
+        }
+        @keyframes pulseRed {
+            0% { background-color: rgba(255, 59, 59, 0.2); }
+            100% { background-color: transparent; }
+        }
+        
+        .nuke-btn:hover {
+            background-color: rgba(255, 59, 59, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-[#1e1e1e] text-text-primary font-body-default text-body-default h-screen w-screen overflow-hidden flex flex-col antialiased">
+<!-- TopNavBar -->
+<nav class="bg-vscode-nav flex justify-between items-center h-nav-height px-margin-desktop w-full z-50 border-b border-border-default shrink-0">
+<div class="flex items-center gap-6">
+<span class="font-headline-lg text-headline-lg font-bold text-crimson tracking-tighter">RSE</span>
+<div class="hidden md:flex gap-6 h-full items-end">
+<a class="font-label-caps text-label-caps text-text-primary border-b-2 border-crimson pb-1 hover:text-crimson transition-colors duration-200" href="#">Documentation</a>
+<a class="font-label-caps text-label-caps text-text-secondary hover:text-crimson transition-colors duration-200" href="#">GitHub</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative bg-vscode-panel border border-border-default h-8 w-64 flex items-center px-2 focus-within:border-crimson focus-within:border-2 transition-all">
+<span class="material-symbols-outlined text-text-muted text-[16px] mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none outline-none text-text-primary font-mono-data-sm text-mono-data-sm w-full placeholder-text-muted p-0 focus:ring-0" placeholder="Search keys..." type="text"/>
+</div>
+<button class="nuke-btn border border-nuke-red text-nuke-red font-label-caps text-label-caps px-4 h-8 flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="warning">warning</span>
+                FLUSHALL
+            </button>
+<button class="bg-crimson text-white font-label-caps text-label-caps px-4 h-8 rounded hover:opacity-90 transition-opacity">Launch Lab</button>
+</div>
+</nav>
+<!-- Main Workspace -->
+<main class="flex-1 flex overflow-hidden w-full h-[calc(100vh-56px)]">
+<!-- Left: Command Console Panel (25%) -->
+<section class="w-1/4 h-full border-r border-border-default flex flex-col bg-vscode-panel">
+<div class="h-10 border-b border-border-default flex items-center px-4 justify-between shrink-0 bg-vscode-header border-l-[3px] border-l-crimson">
+<span class="font-label-caps text-label-caps text-text-secondary">TERMINAL</span>
+<span class="font-mono-data-sm text-mono-data-sm text-crimson opacity-70">127.0.0.1:6379</span>
+</div>
+<div class="flex-1 terminal-bg p-4 font-mono-data-lg text-mono-data-lg overflow-y-auto custom-scrollbar flex flex-col justify-end">
+<div class="space-y-2 opacity-80 font-mono">
+<div><span class="text-text-muted">&gt;</span> <span class="text-syn-purple">GET</span> <span class="text-syn-blue">session:usr:1092</span></div>
+<div><span class="text-syn-orange">"{\"id\": 1092, \"role\": \"admin\"}"</span></div>
+<div><span class="text-text-muted">&gt;</span> <span class="text-syn-purple">KEYS</span> <span class="text-syn-blue">user:*</span></div>
+<div><span class="text-syn-green">1)</span> <span class="text-syn-orange">"user:profile:847"</span></div>
+<div><span class="text-syn-green">2)</span> <span class="text-syn-orange">"user:settings:847"</span></div>
+<div><span class="text-text-muted">&gt;</span> <span class="text-syn-purple">SCAN</span> <span class="text-syn-green">0</span> <span class="text-syn-purple">MATCH</span> <span class="text-syn-blue">evt:*</span> <span class="text-syn-purple">COUNT</span> <span class="text-syn-green">10</span></div>
+<div><span class="text-syn-green">1)</span> <span class="text-syn-orange">"24"</span></div>
+<div><span class="text-syn-green">2)</span> <span class="text-syn-green">1)</span> <span class="text-syn-orange">"evt:click:a1b2"</span></div>
+<div> <span class="text-syn-green">2)</span> <span class="text-syn-orange">"evt:hover:c3d4"</span></div>
+</div>
+<div class="mt-4 flex items-center">
+<span class="text-text-muted mr-2">&gt;</span>
+<input autofocus="" class="bg-transparent border-none outline-none text-white font-mono-data-lg text-mono-data-lg w-full p-0 focus:ring-0" type="text"/>
+<span class="w-2 h-4 bg-crimson animate-pulse inline-block ml-1"></span>
+</div>
+</div>
+</section>
+<!-- Center: Keyspace Explorer Table (50%) -->
+<section class="w-2/4 h-full border-r border-border-default flex flex-col bg-vscode-panel">
+<div class="h-10 border-b border-border-default flex items-center px-4 justify-between shrink-0 bg-vscode-header border-l-[3px] border-l-crimson">
+<span class="font-label-caps text-label-caps text-text-secondary">KEYSPACE EXPLORER</span>
+<div class="flex gap-2">
+<span class="font-mono-data-sm text-mono-data-sm text-text-muted">DB: 0</span>
+<span class="font-mono-data-sm text-mono-data-sm text-text-muted">Keys: 1,402</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-vscode-header z-10 border-b border-border-default font-label-caps text-label-caps text-text-secondary">
+<tr>
+<th class="px-4 py-2 font-normal w-1/3">Key Name</th>
+<th class="px-4 py-2 font-normal w-1/3">Value Preview</th>
+<th class="px-4 py-2 font-normal w-1/6">Type</th>
+<th class="px-4 py-2 font-normal w-1/6">TTL</th>
+</tr>
+</thead>
+<tbody class="font-mono-data-sm text-mono-data-sm">
+<!-- Active Row -->
+<tr class="h-10 border-b border-border-default bg-crimson/15 border-l-[2px] border-l-crimson cursor-pointer">
+<td class="px-4 py-2 truncate text-white">session:usr:1092</td>
+<td class="px-4 py-2 truncate text-text-secondary">{"id": 1092, "role"...</td>
+<td class="px-4 py-2">
+<span class="inline-block px-2 py-0.5 bg-badge-bg text-syn-blue font-label-caps text-[10px] rounded-[2px]">HASH</span>
+</td>
+<td class="px-4 py-2 text-text-secondary">-1</td>
+</tr>
+<!-- Standard Row -->
+<tr class="h-10 border-b border-border-default hover:bg-vscode-header cursor-pointer transition-colors">
+<td class="px-4 py-2 truncate text-text-primary">user:profile:847</td>
+<td class="px-4 py-2 truncate text-text-secondary">"Alice Smith"</td>
+<td class="px-4 py-2">
+<span class="inline-block px-2 py-0.5 bg-badge-bg text-syn-orange font-label-caps text-[10px] rounded-[2px]">STRING</span>
+</td>
+<td class="px-4 py-2 text-text-secondary">-1</td>
+</tr>
+<!-- Changed Row Pulse -->
+<tr class="h-10 border-b border-border-default bg-vscode-panel cursor-pointer row-pulse-amber">
+<td class="px-4 py-2 truncate text-text-primary">cache:prod:catalog</td>
+<td class="px-4 py-2 truncate text-text-secondary">[binary payload]</td>
+<td class="px-4 py-2">
+<span class="inline-block px-2 py-0.5 bg-badge-bg text-syn-orange font-label-caps text-[10px] rounded-[2px]">STRING</span>
+</td>
+<td class="px-4 py-2 text-ttl-warning">45s</td>
+</tr>
+<!-- New Row Pulse -->
+<tr class="h-10 border-b border-border-default bg-vscode-panel cursor-pointer row-pulse-green">
+<td class="px-4 py-2 truncate text-text-primary">evt:click:a1b2</td>
+<td class="px-4 py-2 truncate text-text-secondary">"ts:1678901234"</td>
+<td class="px-4 py-2">
+<span class="inline-block px-2 py-0.5 bg-badge-bg text-syn-orange font-label-caps text-[10px] rounded-[2px]">STRING</span>
+</td>
+<td class="px-4 py-2 text-text-secondary">120s</td>
+</tr>
+<!-- Expiring Soon -->
+<tr class="h-10 border-b border-border-default hover:bg-vscode-header cursor-pointer transition-colors">
+<td class="px-4 py-2 truncate text-text-primary">tmp:reset_token:x9z</td>
+<td class="px-4 py-2 truncate text-text-secondary">"a8f7e6d5"</td>
+<td class="px-4 py-2">
+<span class="inline-block px-2 py-0.5 bg-badge-bg text-syn-orange font-label-caps text-[10px] rounded-[2px]">STRING</span>
+</td>
+<td class="px-4 py-2 text-ttl-warning flex items-center gap-2">
+                                08s
+                                <div class="w-12 h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-ttl-warning w-1/5"></div>
+</div>
+</td>
+</tr>
+<tr class="h-10 border-b border-border-default hover:bg-vscode-header cursor-pointer transition-colors">
+<td class="px-4 py-2 truncate text-text-primary">list:tasks:queue</td>
+<td class="px-4 py-2 truncate text-text-secondary">"task_992", "task_993"...</td>
+<td class="px-4 py-2">
+<span class="inline-block px-2 py-0.5 bg-badge-bg text-syn-purple font-label-caps text-[10px] rounded-[2px]">LIST</span>
+</td>
+<td class="px-4 py-2 text-text-secondary">-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Right: Key Inspector Panel (25%) -->
+<section class="w-1/4 h-full bg-vscode-panel flex flex-col">
+<div class="h-10 border-b border-border-default flex items-center px-4 justify-between shrink-0 bg-vscode-header border-l-[3px] border-l-crimson">
+<span class="font-label-caps text-label-caps text-text-secondary">INSPECTOR</span>
+<div class="flex gap-2">
+<button class="text-text-muted hover:text-text-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="refresh">refresh</span>
+</button>
+<button class="text-text-muted hover:text-nuke-red transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<div class="flex-1 p-4 overflow-y-auto custom-scrollbar flex flex-col gap-6">
+<!-- Header Info -->
+<div>
+<div class="font-mono-data-lg text-mono-data-lg text-text-primary mb-1 break-all">session:usr:1092</div>
+<div class="flex items-center gap-3">
+<span class="inline-block px-2 py-0.5 bg-badge-bg text-syn-blue font-label-caps text-[10px] rounded-[2px]">HASH</span>
+<span class="font-mono-data-sm text-mono-data-sm text-text-secondary">Size: 128B</span>
+</div>
+</div>
+<!-- Meta Details Grid -->
+<div class="grid grid-cols-2 gap-4 border border-border-default p-3 bg-vscode-header">
+<div>
+<div class="font-label-caps text-label-caps text-text-secondary mb-1">TTL</div>
+<div class="font-mono-data-sm text-mono-data-sm text-text-primary">-1 (Persistent)</div>
+</div>
+<div>
+<div class="font-label-caps text-label-caps text-text-secondary mb-1">ENCODING</div>
+<div class="font-mono-data-sm text-mono-data-sm text-text-primary">ziplist</div>
+</div>
+<div>
+<div class="font-label-caps text-label-caps text-text-secondary mb-1">IDLE TIME</div>
+<div class="font-mono-data-sm text-mono-data-sm text-text-primary">12s</div>
+</div>
+<div>
+<div class="font-label-caps text-label-caps text-text-secondary mb-1">FIELDS</div>
+<div class="font-mono-data-sm text-mono-data-sm text-text-primary">4</div>
+</div>
+</div>
+<!-- Value Editor -->
+<div class="flex-1 flex flex-col">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-caps text-label-caps text-text-secondary">VALUE DATA</span>
+<button class="font-label-caps text-label-caps text-crimson hover:underline">Edit</button>
+</div>
+<div class="flex-1 border border-border-default bg-vscode-term p-3 font-mono-data-sm text-mono-data-sm text-text-primary overflow-y-auto custom-scrollbar whitespace-pre-wrap">
+{
+  <span class="text-syn-blue">"id"</span>: <span class="text-syn-orange">"1092"</span>,
+  <span class="text-syn-blue">"role"</span>: <span class="text-syn-orange">"admin"</span>,
+  <span class="text-syn-blue">"last_login"</span>: <span class="text-syn-orange">"1678901000"</span>,
+  <span class="text-syn-blue">"theme"</span>: <span class="text-syn-orange">"dark"</span>
+}</div>
+</div>
+<!-- Action -->
+<button class="w-full h-8 border border-border-default bg-transparent text-text-primary font-label-caps text-label-caps hover:bg-vscode-header transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[16px]" data-icon="save">save</span>
+                    SAVE CHANGES
+                </button>
+</div>
+</section>
+</main>
+<script>
+        // Simple JS to randomly trigger pulses for demonstration
+        setInterval(() => {
+            const rows = document.querySelectorAll('tbody tr');
+            if(rows.length > 3) {
+                const randomRow = rows[Math.floor(Math.random() * rows.length)];
+                if(!randomRow.classList.contains('border-l-crimson')) {
+                    const classes = ['row-pulse-amber', 'row-pulse-green'];
+                    const randomClass = classes[Math.floor(Math.random() * classes.length)];
+                    
+                    randomRow.classList.remove('row-pulse-amber', 'row-pulse-green', 'row-pulse-red');
+                    // Force reflow
+                    void randomRow.offsetWidth;
+                    randomRow.classList.add(randomClass);
+                }
+            }
+        }, 3000);
+    </script>
+</body></html>

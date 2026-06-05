@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RSE - Break &amp; Learn Experiment</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ffb4ab",
+                        "text-secondary": "#888888",
+                        "on-secondary": "#412d00",
+                        "surface-tint": "#00e479",
+                        "surface-container-lowest": "#0e0e0e",
+                        "bg-elevated": "#1E1E1E",
+                        "text-primary": "#F0F0F0",
+                        "on-tertiary-fixed-variant": "#930010",
+                        "outline": "#849585",
+                        "surface-container-high": "#2a2a2a",
+                        "accent-info": "#4DA6FF",
+                        "text-muted": "#555555",
+                        "background": "#131313",
+                        "surface-variant": "#353534",
+                        "on-tertiary": "#680008",
+                        "surface-bright": "#3a3939",
+                        "secondary-fixed-dim": "#ffba20",
+                        "secondary": "#ffdb9d",
+                        "bg-panel": "#111111",
+                        "on-tertiary-fixed": "#410003",
+                        "inverse-surface": "#e5e2e1",
+                        "surface-dim": "#131313",
+                        "text-terminal": "#A8FF78",
+                        "inverse-on-surface": "#313030",
+                        "on-error-container": "#ffdad6",
+                        "bg-surface": "#181818",
+                        "surface-container": "#201f1f",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#5e4200",
+                        "surface-container-low": "#1c1b1b",
+                        "outline-variant": "#3b4b3d",
+                        "on-error": "#690005",
+                        "primary": "#f1ffef",
+                        "surface-container-highest": "#353534",
+                        "primary-fixed-dim": "#00e479",
+                        "on-primary": "#003919",
+                        "on-secondary-fixed": "#271900",
+                        "tertiary-fixed": "#ffdad6",
+                        "on-secondary-container": "#6b4b00",
+                        "primary-container": "#00ff88",
+                        "border-accent": "#3A3A3A",
+                        "tertiary-container": "#ffd5d1",
+                        "on-surface": "#e5e2e1",
+                        "inverse-primary": "#006d37",
+                        "secondary-container": "#feb700",
+                        "on-surface-variant": "#b9cbb9",
+                        "secondary-fixed": "#ffdea8",
+                        "primary-fixed": "#60ff99",
+                        "on-tertiary-container": "#c6031a",
+                        "on-primary-fixed-variant": "#005228",
+                        "on-primary-container": "#007139",
+                        "tertiary": "#fffaf9",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-background": "#e5e2e1",
+                        "surface": "#131313",
+                        "border-default": "#2A2A2A",
+                        "on-primary-fixed": "#00210c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "32px",
+                        "base-unit": "4px",
+                        "utility-height": "48px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "nav-height": "56px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["IBM Plex Sans"],
+                        "mono-data-sm": ["JetBrains Mono"],
+                        "headline-xl": ["IBM Plex Sans"],
+                        "headline-lg": ["IBM Plex Sans"],
+                        "label-caps": ["IBM Plex Sans"],
+                        "mono-data-lg": ["JetBrains Mono"],
+                        "headline-md": ["IBM Plex Sans"],
+                        "body-default": ["IBM Plex Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "mono-data-sm": ["13px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.25", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "mono-data-lg": ["15px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-default": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom scrollbar for terminal/visualizer to match brutalist aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111111; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3A3A3A; 
+            border-radius: 0;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555555; 
+        }
+        
+        .node-connector {
+            background-image: linear-gradient(to right, #3A3A3A 50%, transparent 50%);
+            background-size: 8px 100%;
+            background-repeat: repeat-x;
+        }
+    </style>
+</head>
+<body class="bg-background text-primary font-body-default h-screen overflow-hidden flex selection:bg-primary-container selection:text-on-primary-container">
+<!-- Shared Component: SideNavBar -->
+<nav class="bg-bg-panel dark:bg-bg-panel flex flex-col h-full py-4 border-r border-border-default w-64 shrink-0 font-body-default text-body-default">
+<!-- Header -->
+<div class="px-6 mb-8 flex flex-col gap-1">
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">RSE Explorer</h1>
+<span class="font-mono-data-sm text-mono-data-sm text-text-secondary">v1.0.4-stable</span>
+</div>
+<!-- CTA -->
+<div class="px-4 mb-6">
+<button class="w-full bg-primary-container text-[#000000] font-label-caps text-label-caps py-2 px-4 rounded flex items-center justify-center gap-2 hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Connection
+            </button>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 px-2 space-y-1">
+<!-- Active: Explorer (Contextual for this guided module) -->
+<a class="flex items-center gap-3 px-4 py-2 bg-surface-variant text-primary border-l-2 border-primary-container opacity-80" href="#">
+<span class="material-symbols-outlined text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">database</span>
+<span>Explorer</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-text-secondary hover:bg-surface-container-low hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">account_tree</span>
+<span>Visualizer</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-text-secondary hover:bg-surface-container-low hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">terminal</span>
+<span>Terminal</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-text-secondary hover:bg-surface-container-low hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span>Settings</span>
+</a>
+</div>
+<!-- Footer -->
+<div class="px-2 mt-auto pt-4 border-t border-border-default">
+<a class="flex items-center gap-3 px-4 py-2 text-text-secondary hover:bg-surface-container-low hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+<span>Support</span>
+</a>
+</div>
+</nav>
+<!-- Main Workspace Area -->
+<main class="flex-1 flex w-full h-full">
+<!-- Left Panel: Briefing (30%) -->
+<aside class="w-[30%] min-w-[320px] max-w-[450px] bg-bg-panel border-r border-border-default flex flex-col h-full z-10 shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
+<!-- Module Header -->
+<header class="p-6 border-b border-border-default bg-surface-container-lowest">
+<div class="inline-flex items-center gap-2 px-2 py-1 bg-surface-variant text-primary-container font-label-caps text-label-caps rounded-sm mb-4">
+<span class="material-symbols-outlined text-[14px]">experiment</span>
+                    Break &amp; Learn
+                </div>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">Queue Manipulation</h2>
+<p class="text-text-secondary leading-relaxed">
+                    Understand how Lists function as queues by simulating an asynchronous worker process. Add payload data and observe the structural shifts in real-time.
+                </p>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-6 space-y-8">
+<!-- Commands Section -->
+<section>
+<h3 class="font-label-caps text-label-caps text-text-muted mb-3 uppercase tracking-wider">Useful Commands</h3>
+<div class="flex flex-wrap gap-2">
+<code class="font-mono-data-sm text-mono-data-sm bg-surface text-primary border border-border-default px-2 py-1 rounded-sm cursor-help hover:border-primary-container transition-colors">LPUSH key val</code>
+<code class="font-mono-data-sm text-mono-data-sm bg-surface text-primary border border-border-default px-2 py-1 rounded-sm cursor-help hover:border-primary-container transition-colors">RPUSH key val</code>
+<code class="font-mono-data-sm text-mono-data-sm bg-surface text-primary border border-border-default px-2 py-1 rounded-sm cursor-help hover:border-primary-container transition-colors">RPOP key</code>
+<code class="font-mono-data-sm text-mono-data-sm bg-surface text-primary border border-border-default px-2 py-1 rounded-sm cursor-help hover:border-primary-container transition-colors">LLEN key</code>
+</div>
+</section>
+<!-- Checklist Section -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-label-caps text-label-caps text-text-muted uppercase tracking-wider">Verification Steps</h3>
+<span class="font-mono-data-sm text-mono-data-sm text-primary-container">1 / 3</span>
+</div>
+<ul class="space-y-3">
+<!-- Step 1 (Completed) -->
+<li class="flex items-start gap-3 p-3 bg-surface border border-border-default rounded">
+<div class="mt-0.5 text-primary-container">
+<span class="material-symbols-outlined text-[20px]">check_box</span>
+</div>
+<div>
+<p class="text-text-primary mb-1 line-through opacity-70">Initialize the list `task_queue` with 3 initial payloads.</p>
+<div class="font-mono-data-sm text-mono-data-sm text-text-secondary opacity-70">&gt; LPUSH task_queue job_1 job_2 job_3</div>
+</div>
+</li>
+<!-- Step 2 (Active) -->
+<li class="flex items-start gap-3 p-3 bg-bg-elevated border border-primary-container rounded shadow-[0_0_12px_rgba(0,255,136,0.1)]">
+<div class="mt-0.5 text-text-secondary">
+<span class="material-symbols-outlined text-[20px]">check_box_outline_blank</span>
+</div>
+<div>
+<p class="text-text-primary mb-1">Pop the oldest task off the queue for processing.</p>
+<div class="font-mono-data-sm text-mono-data-sm text-text-muted">Waiting for RPOP command...</div>
+</div>
+</li>
+<!-- Step 3 (Pending) -->
+<li class="flex items-start gap-3 p-3 bg-surface border border-border-default rounded opacity-50">
+<div class="mt-0.5 text-text-secondary">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+<div>
+<p class="text-text-primary">Verify queue length is exactly 2.</p>
+</div>
+</li>
+</ul>
+</section>
+</div>
+<!-- Footer Actions -->
+<div class="p-4 border-t border-border-default bg-surface-container-lowest flex justify-between items-center">
+<button class="text-text-secondary hover:text-error transition-colors font-label-caps text-label-caps flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">restart_alt</span>
+                    Reset Env
+                </button>
+<button class="bg-surface-variant text-primary border border-border-accent hover:border-primary-container px-4 py-2 rounded font-label-caps text-label-caps transition-all">
+                    Skip Module
+                </button>
+</div>
+</aside>
+<!-- Right Panel: Work Area (70%) -->
+<section class="w-[70%] flex flex-col h-full bg-background">
+<!-- Top Half: Terminal Console -->
+<div class="flex-1 flex flex-col border-b border-border-default min-h-[40%] bg-[#000000] relative">
+<!-- Tab/Header -->
+<div class="flex items-center justify-between px-4 py-2 border-b border-[#222222] bg-[#0A0A0A]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-text-secondary">terminal</span>
+<span class="font-mono-data-sm text-mono-data-sm text-text-secondary">rse-node-01 / task_runner</span>
+</div>
+<div class="flex gap-2">
+<div class="w-3 h-3 rounded-full bg-surface-variant border border-border-default"></div>
+<div class="w-3 h-3 rounded-full bg-surface-variant border border-border-default"></div>
+<div class="w-3 h-3 rounded-full bg-primary-container opacity-80 blur-[1px]"></div>
+</div>
+</div>
+<!-- Terminal Content Area -->
+<div class="flex-1 p-4 overflow-y-auto font-mono-data-lg text-mono-data-lg text-text-terminal flex flex-col gap-1">
+<div class="text-text-muted">RSE Runtime Environment initialized.</div>
+<div class="text-text-muted">Connected to: redis://127.0.0.1:6379</div>
+<div class="mt-2 flex gap-2">
+<span class="text-text-muted">rse:6379&gt;</span>
+<span>LPUSH task_queue job_1 job_2 job_3</span>
+</div>
+<div class="text-primary-container">(integer) 3</div>
+<div class="mt-1 flex gap-2">
+<span class="text-text-muted">rse:6379&gt;</span>
+<span>LRANGE task_queue 0 -1</span>
+</div>
+<div class="text-primary-container">
+                        1) "job_3"<br/>
+                        2) "job_2"<br/>
+                        3) "job_1"
+                    </div>
+<!-- Active Input Line -->
+<div class="mt-4 flex gap-2 items-center">
+<span class="text-text-muted">rse:6379&gt;</span>
+<div class="flex items-center">
+<span class="text-text-primary">RPOP</span>
+<span class="w-2 h-5 bg-text-terminal ml-1 animate-pulse"></span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Half: Structural Visualizer -->
+<div class="flex-1 flex flex-col bg-surface-dim relative overflow-hidden">
+<!-- Visualizer Header -->
+<div class="flex items-center justify-between px-4 py-3 border-b border-border-default bg-bg-panel z-10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[18px] text-accent-info">data_object</span>
+<h3 class="font-headline-md text-body-default text-primary">Live Structure: <span class="font-mono-data-sm text-mono-data-sm text-accent-info">task_queue</span></h3>
+<span class="px-2 py-0.5 bg-[rgba(77,166,255,0.15)] text-accent-info border border-[rgba(77,166,255,0.3)] rounded-sm font-label-caps text-[10px] tracking-widest uppercase">List</span>
+</div>
+<div class="flex items-center gap-4 text-text-secondary font-mono-data-sm text-[12px]">
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+                            HEAD
+                        </div>
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-text-secondary"></span>
+                            TAIL
+                        </div>
+<span class="px-2 py-1 bg-surface border border-border-default rounded">LEN: 3</span>
+</div>
+</div>
+<!-- Visualizer Canvas -->
+<div class="flex-1 p-8 overflow-x-auto flex items-center min-h-[300px] relative w-full h-full bg-[radial-gradient(#2A2A2A_1px,transparent_1px)] [background-size:24px_24px]">
+<!-- List Data Structure -->
+<div class="flex items-center gap-0 w-max mx-auto relative z-10 p-8">
+<!-- HEAD Indicator -->
+<div class="absolute top-0 left-8 flex flex-col items-center">
+<span class="font-label-caps text-label-caps text-primary-container mb-1">HEAD</span>
+<span class="material-symbols-outlined text-primary-container text-[16px]">arrow_drop_down</span>
+</div>
+<!-- Node 1 (job_3 - Most recently pushed to Left) -->
+<div class="relative group">
+<div class="w-32 bg-surface-container border-2 border-border-default rounded flex flex-col overflow-hidden shadow-[0_8px_16px_rgba(0,0,0,0.6)] transition-all hover:border-primary-container">
+<div class="bg-surface border-b border-border-default px-2 py-1 text-center font-mono-data-sm text-[10px] text-text-muted">
+                                    Index: 0
+                                </div>
+<div class="p-3 text-center font-mono-data-lg text-primary truncate">
+                                    "job_3"
+                                </div>
+</div>
+<!-- Upcoming mutation highlight overlay -->
+<div class="absolute inset-0 bg-primary-container opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none rounded"></div>
+</div>
+<!-- Connector -->
+<div class="w-12 h-[2px] node-connector flex items-center justify-center relative">
+<span class="material-symbols-outlined text-[14px] text-border-accent absolute -right-1">chevron_right</span>
+</div>
+<!-- Node 2 (job_2) -->
+<div class="relative">
+<div class="w-32 bg-surface-container border-2 border-border-default rounded flex flex-col overflow-hidden shadow-[0_8px_16px_rgba(0,0,0,0.6)]">
+<div class="bg-surface border-b border-border-default px-2 py-1 text-center font-mono-data-sm text-[10px] text-text-muted">
+                                    Index: 1
+                                </div>
+<div class="p-3 text-center font-mono-data-lg text-primary truncate">
+                                    "job_2"
+                                </div>
+</div>
+</div>
+<!-- Connector -->
+<div class="w-12 h-[2px] node-connector flex items-center justify-center relative">
+<span class="material-symbols-outlined text-[14px] text-border-accent absolute -right-1">chevron_right</span>
+</div>
+<!-- Node 3 (job_1 - Tail, target for RPOP) -->
+<div class="relative group">
+<!-- Targeted highlight for RPOP step -->
+<div class="absolute -inset-2 border border-dashed border-error rounded z-0 animate-pulse"></div>
+<div class="w-32 bg-surface-container border-2 border-error rounded flex flex-col overflow-hidden shadow-[0_8px_16px_rgba(255,59,59,0.15)] relative z-10 bg-[linear-gradient(45deg,transparent_25%,rgba(255,59,59,0.05)_50%,transparent_75%,transparent_100%)] bg-[length:10px_10px]">
+<div class="bg-surface border-b border-error px-2 py-1 text-center font-mono-data-sm text-[10px] text-error">
+                                    Target: RPOP
+                                </div>
+<div class="p-3 text-center font-mono-data-lg text-primary truncate">
+                                    "job_1"
+                                </div>
+</div>
+</div>
+<!-- TAIL Indicator -->
+<div class="absolute top-0 right-8 flex flex-col items-center">
+<span class="font-label-caps text-label-caps text-text-secondary mb-1">TAIL</span>
+<span class="material-symbols-outlined text-text-secondary text-[16px]">arrow_drop_down</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>

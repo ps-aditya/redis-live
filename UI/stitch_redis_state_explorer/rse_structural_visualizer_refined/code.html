@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RSE - Real-Time Structural Visualizer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ffb4ab",
+                        "text-secondary": "#888888",
+                        "on-secondary": "#412d00",
+                        "surface-tint": "#dc143c",
+                        "surface-container-lowest": "#0d0e0f",
+                        "bg-elevated": "#1E1E1E",
+                        "text-primary": "#F0F0F0",
+                        "on-tertiary-fixed-variant": "#930010",
+                        "outline": "#849585",
+                        "surface-container-high": "#2b2a2a",
+                        "accent-info": "#4DA6FF",
+                        "text-muted": "#555555",
+                        "background": "#1E1E1E",
+                        "surface-variant": "#353534",
+                        "on-tertiary": "#680008",
+                        "surface-bright": "#38393a",
+                        "secondary-fixed-dim": "#ffba20",
+                        "secondary": "#ffdb9d",
+                        "bg-panel": "#181818",
+                        "on-tertiary-fixed": "#410003",
+                        "inverse-surface": "#e5e2e1",
+                        "surface-dim": "#121414",
+                        "text-terminal": "#A8FF78",
+                        "inverse-on-surface": "#313030",
+                        "on-error-container": "#ffdad6",
+                        "bg-surface": "#121414",
+                        "surface-container": "#1e2020",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#5e4200",
+                        "surface-container-low": "#1a1c1c",
+                        "outline-variant": "#3b4b3d",
+                        "on-error": "#690005",
+                        "primary": "#ffdad9",
+                        "surface-container-highest": "#363636",
+                        "primary-fixed-dim": "#ffb3b2",
+                        "on-primary": "#410007",
+                        "on-secondary-fixed": "#271900",
+                        "tertiary-fixed": "#ffdad6",
+                        "on-secondary-container": "#6b4b00",
+                        "primary-container": "#930019",
+                        "border-accent": "#3A3A3A",
+                        "tertiary-container": "#ffd5d1",
+                        "on-surface": "#e5e2e1",
+                        "inverse-primary": "#dc143c",
+                        "secondary-container": "#feb700",
+                        "on-surface-variant": "#b9cbb9",
+                        "secondary-fixed": "#ffdea8",
+                        "primary-fixed": "#ffdad9",
+                        "on-tertiary-container": "#c6031a",
+                        "on-primary-fixed-variant": "#930019",
+                        "on-primary-container": "#ffdad9",
+                        "tertiary": "#fffaf9",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-background": "#e5e2e1",
+                        "surface": "#121414",
+                        "border-default": "#2A2A2A",
+                        "on-primary-fixed": "#410007"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "32px",
+                        "base-unit": "4px",
+                        "utility-height": "48px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "nav-height": "56px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["IBM Plex Sans"],
+                        "mono-data-sm": ["JetBrains Mono"],
+                        "headline-xl": ["IBM Plex Sans"],
+                        "headline-lg": ["IBM Plex Sans"],
+                        "label-caps": ["IBM Plex Sans"],
+                        "mono-data-lg": ["JetBrains Mono"],
+                        "headline-md": ["IBM Plex Sans"],
+                        "body-default": ["IBM Plex Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "mono-data-sm": ["13px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.25", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "mono-data-lg": ["15px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-default": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    },
+                    "animation": {
+                        "step-glow": "step-glow 2s infinite ease-in-out",
+                        "banner-slide": "banner-slide 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+                        "node-entry": "node-entry 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards"
+                    },
+                    "keyframes": {
+                        "step-glow": {
+                            "0%, 100%": { "box-shadow": "0 0 0px rgba(147, 0, 25, 0)", "background-color": "transparent" },
+                            "50%": { "box-shadow": "0 0 15px rgba(147, 0, 25, 0.3)", "background-color": "rgba(147, 0, 25, 0.1)" }
+                        },
+                        "banner-slide": {
+                            "0%": { "transform": "translateY(-100%)", "opacity": "0" },
+                            "100%": { "transform": "translateY(0)", "opacity": "1" }
+                        },
+                        "node-entry": {
+                            "0%": { "transform": "translateX(-20px)", "opacity": "0" },
+                            "100%": { "transform": "translateX(0)", "opacity": "1" }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+<style>body {
+    background-color: #1E1E1E;
+    color: #F0F0F0;
+    font-family: "IBM Plex Sans", sans-serif
+    }
+.data-key-value {
+    font-family: "JetBrains Mono", monospace
+    }
+.grid-bg {
+    background-size: 24px 24px;
+    background-image: linear-gradient(to right, rgba(42, 42, 42, 0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(42, 42, 42, 0.5) 1px, transparent 1px);
+    position: relative
+    }
+.grid-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuBVMxiuzP3TWB6-HDoGjDoCo3hjZi-TMTDv9SqyIFsRfP-lAUXys957WnCReDLk9mn1EP59sYderewlwlM_YG0VUjfq5p_NEfaB2rq7ZILUimRWFWx57tLJUHfauxP5kW6g9sZtpbPUj07qwTMg9U9FXnqMwpz_YzUaast08L1AV_YOp9xQIGP7C2cUq9Gjw3nM5IOnAh3vFVTrqdl7qWBGkMyLqEuVXgXa30lPHLJLZzqwT5vdwKow1HgEhS3A9TfOcwvAibF6FC6K);
+    background-repeat: repeat;
+    background-size: 180px;
+    opacity: 0.02;
+    pointer-events: none;
+    z-index: 0
+    }
+.ttl-bar-urgent {
+    background: linear-gradient(90deg, #FFB800 0%, #FF3B3B 100%)
+    }
+.ttl-bar-safe {
+    background: linear-gradient(90deg, #0F8 0%, #00e479 100%)
+    }
+.trace-step-animate-1 {
+    animation: step-glow 4s infinite 0s
+    }
+.trace-step-animate-2 {
+    animation: step-glow 4s infinite 1s
+    }
+.trace-step-animate-3 {
+    animation: step-glow 4s infinite 2s
+    }
+.trace-step-animate-4 {
+    animation: step-glow 4s infinite 3s
+    }</style>
+</head>
+<body class="h-screen w-full flex overflow-hidden">
+<!-- SideNavBar -->
+<aside class="bg-bg-panel flex flex-col h-full py-4 border-r border-border-default docked left-0 w-64 z-40 shrink-0">
+<div class="px-6 mb-8">
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">RSE Explorer</h1>
+<p class="font-mono-data-sm text-mono-data-sm text-text-secondary mt-1">v1.0.4-stable</p>
+</div>
+<div class="px-4 mb-6">
+<button class="w-full bg-primary-container text-white font-label-caps text-label-caps py-2 rounded flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[16px]">add</span>
+            New Connection
+        </button>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-text-secondary hover:bg-surface-container-low hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">database</span>
+<span class="font-body-default text-body-default">Explorer</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded bg-surface-variant text-primary border-l-2 border-primary-container opacity-100 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">account_tree</span>
+<span class="font-body-default text-body-default">Visualizer</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-text-secondary hover:bg-surface-container-low hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">terminal</span>
+<span class="font-body-default text-body-default">Terminal</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-text-secondary hover:bg-surface-container-low hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-body-default text-body-default">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-3 border-t border-border-default pt-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded text-text-secondary hover:bg-surface-container-low hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+<span class="font-body-default text-body-default">Support</span>
+</a>
+<div class="mt-4 px-3 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-border-default flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-[20px] text-text-secondary">person</span>
+</div>
+<span class="font-body-default text-body-default text-text-secondary">User profile</span>
+</div>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="flex-1 flex flex-col h-full overflow-hidden bg-background relative">
+<!-- TopAppBar / Header -->
+<header class="flex justify-between items-center h-nav-height px-margin-desktop w-full z-50 bg-bg-panel border-b border-border-default shrink-0">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">account_tree</span>
+<h2 class="font-headline-md text-headline-md text-primary">Structure Canvas</h2>
+</div>
+<div class="h-4 w-px bg-border-default"></div>
+<span class="font-mono-data-sm text-mono-data-sm text-text-secondary">db0 &gt; active_sessions</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-mono-data-sm text-mono-data-sm text-primary-container px-2 py-1 bg-[#930019]/20 rounded border border-primary-container/30">
+                LIVE SYNC
+            </span>
+<button class="text-text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">pause_circle</span>
+</button>
+</div>
+</header>
+<!-- Execution Trace Pipeline -->
+<div class="bg-bg-surface border-b border-border-default px-margin-desktop py-4 shrink-0">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-text-secondary mb-2 block">Execution Trace</span>
+<span class="font-mono-data-sm text-mono-data-sm text-text-muted mb-2 block">Latency: 0.12ms</span>
+</div>
+<div class="flex items-center w-full bg-bg-panel border border-border-default rounded p-1">
+<!-- Step 1: Input/Parse -->
+<div class="flex-1 flex items-center px-4 py-2 relative trace-step-animate-1 rounded-sm">
+<div class="flex items-center gap-2"><span class="font-mono-data-sm text-mono-data-sm text-text-secondary">INPUT ·</span></div>
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-px bg-border-default"></div>
+</div>
+<!-- Step 2: Interpretation -->
+<div class="flex-1 flex items-center px-4 py-2 relative border-l border-border-default trace-step-animate-2 rounded-sm">
+<div class="flex items-center gap-2"><span class="font-mono-data-sm text-mono-data-sm text-text-secondary">INTERPRET ·</span></div>
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-px bg-border-default"></div>
+</div>
+<!-- Step 3: Delta (Mutation) -->
+<div class="flex-1 flex items-center px-4 py-2 relative border-l border-border-default trace-step-animate-3 rounded-sm">
+<div class="flex items-center gap-2"><span class="font-mono-data-sm text-mono-data-sm text-primary">DELTA ·</span></div>
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-px bg-primary-container/40"></div>
+</div>
+<!-- Step 4: Visualization -->
+<div class="flex-1 flex items-center px-4 py-2 relative border-l border-border-default trace-step-animate-4 rounded-sm">
+<div class="flex items-center gap-2"><span class="font-mono-data-sm text-mono-data-sm text-text-secondary">VISUALIZE</span></div>
+</div>
+</div>
+<div class="mt-2 font-mono-data-sm text-mono-data-sm text-text-terminal">
+            &gt; LPUSH task_queue "job_8829"
+        </div>
+</div>
+<!-- BreakConsequenceBar -->
+<div class="animate-banner-slide bg-[rgba(244,71,71,0.08)] border border-[#F44747] border-l-4 border-l-[#F44747] px-margin-desktop py-3 flex items-start gap-3 shrink-0 relative z-20">
+<span class="material-symbols-outlined text-[#F44747] text-[20px] shrink-0 mt-0.5">warning</span>
+<div class="flex flex-col">
+<span class="font-mono-data-sm text-mono-data-sm text-text-secondary leading-snug">
+                ⚠ <span class="text-error font-bold">WRONGTYPE Operation</span>: tried LIST command on STRING key.
+            </span>
+<span class="font-mono-data-sm text-mono-data-sm text-text-muted text-[11px] mt-1">In production this crashes your worker and drops the job.</span>
+</div>
+</div>
+<!-- Main Visualizer Canvas -->
+<div class="flex-1 grid-bg p-8 overflow-auto relative z-10">
+<!-- List Visualization -->
+<div class="mb-12"><div class="flex items-center gap-3 mb-4"><span class="font-label-caps text-label-caps bg-primary-container/10 text-primary-container px-2 py-1 rounded">STRING</span><span class="font-mono-data-lg text-mono-data-lg text-primary">session_token</span></div><div class="inline-flex items-center px-4 py-3 bg-bg-surface border border-border-default rounded"><span class="font-mono-data-sm text-mono-data-sm text-text-terminal">'abc123xyz'</span></div></div><div class="mb-12"><div class="flex items-center gap-3 mb-4"><span class="font-label-caps text-label-caps bg-secondary-container/10 text-secondary-container px-2 py-1 rounded">SET</span><span class="font-mono-data-lg text-mono-data-lg text-primary">active_users</span></div><div class="flex flex-wrap gap-2"><div class="px-3 py-1 bg-surface-container rounded-full border border-border-default font-mono-data-sm text-mono-data-sm text-text-secondary">'uid:101'</div><div class="px-3 py-1 bg-surface-container rounded-full border border-border-default font-mono-data-sm text-mono-data-sm text-text-secondary">'uid:102'</div><div class="px-3 py-1 bg-surface-container rounded-full border border-border-default font-mono-data-sm text-mono-data-sm text-text-secondary">'uid:103'</div></div></div><div class="mb-12">
+<div class="flex items-center gap-3 mb-4">
+<span class="font-label-caps text-label-caps bg-primary-container/10 text-primary-container px-2 py-1 rounded">LIST</span>
+<span class="font-mono-data-lg text-mono-data-lg text-primary">task_queue</span>
+<span class="font-mono-data-sm text-mono-data-sm text-text-muted">Length: 4</span>
+</div>
+<div class="flex items-center gap-4">
+<!-- HEAD Label -->
+<div class="flex flex-col items-center">
+<span class="font-label-caps text-label-caps text-text-muted mb-2">HEAD</span>
+<div class="h-[60px] w-px border-l border-dashed border-border-default"></div>
+</div>
+<!-- Nodes -->
+<div class="flex items-center gap-0">
+<!-- Node 1 (Active/New) -->
+<div class="relative group animate-node-entry" style="animation-delay: 0.1s;">
+<div class="w-32 h-16 bg-bg-surface border-2 border-[#CCA700] rounded flex flex-col justify-center px-3 z-10 relative">
+<span class="font-mono-data-sm text-mono-data-sm text-primary truncate">"job_8829"</span>
+</div>
+<div class="absolute right-[-24px] top-1/2 -translate-y-1/2 w-6 h-px bg-[#CCA700] z-0 flex items-center justify-end">
+<div class="w-2 h-2 border-t border-r border-[#CCA700] transform rotate-45 mr-[-4px]"></div>
+</div>
+</div>
+<div class="w-6"></div>
+<!-- Node 2 -->
+<div class="relative group animate-node-entry" style="animation-delay: 0.2s;">
+<div class="w-32 h-16 bg-bg-surface border border-border-default border-l-2 border-l-[#CCA700] rounded flex flex-col justify-center px-3 z-10 relative hover:border-text-secondary transition-colors">
+<span class="font-mono-data-sm text-mono-data-sm text-text-secondary truncate">"job_8828"</span>
+</div>
+<div class="absolute right-[-24px] top-1/2 -translate-y-1/2 w-6 h-px bg-border-default z-0 flex items-center justify-end">
+<div class="w-2 h-2 border-t border-r border-border-default transform rotate-45 mr-[-4px]"></div>
+</div>
+</div>
+<div class="w-6"></div>
+<!-- Node 3 -->
+<div class="relative group animate-node-entry" style="animation-delay: 0.3s;">
+<div class="w-32 h-16 bg-bg-surface border border-border-default border-l-2 border-l-[#CCA700] rounded flex flex-col justify-center px-3 z-10 relative hover:border-text-secondary transition-colors">
+<span class="font-mono-data-sm text-mono-data-sm text-text-secondary truncate">"job_8827"</span>
+</div>
+<div class="absolute right-[-24px] top-1/2 -translate-y-1/2 w-6 h-px bg-border-default z-0 flex items-center justify-end">
+<div class="w-2 h-2 border-t border-r border-border-default transform rotate-45 mr-[-4px]"></div>
+</div>
+</div>
+<div class="w-6"></div>
+<!-- Node 4 -->
+<div class="relative group animate-node-entry" style="animation-delay: 0.4s;">
+<div class="w-32 h-16 bg-bg-surface border border-border-default border-l-2 border-l-[#CCA700] rounded flex flex-col justify-center px-3 z-10 relative hover:border-text-secondary transition-colors">
+<span class="font-mono-data-sm text-mono-data-sm text-text-secondary truncate">"job_8826"</span>
+</div>
+</div>
+</div>
+<!-- TAIL Label -->
+<div class="flex flex-col items-center ml-4">
+<span class="font-label-caps text-label-caps text-text-muted mb-2">TAIL</span>
+<div class="h-[60px] w-px border-l border-dashed border-border-default"></div>
+</div>
+</div>
+<!-- TTL Progress -->
+<div class="mt-4 flex items-center gap-4 max-w-[600px]">
+<span class="font-mono-data-sm text-mono-data-sm text-text-secondary w-16">TTL</span>
+<div class="flex-1 h-1 bg-surface-container-high rounded overflow-hidden">
+<div class="h-full w-[85%] ttl-bar-safe relative">
+<div class="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-r from-transparent to-white/20 animate-pulse"></div>
+</div>
+</div>
+<span class="font-mono-data-sm text-mono-data-sm text-primary">3400s</span>
+</div>
+</div><div class="mb-12"><div class="flex items-center gap-3 mb-4"><span class="font-label-caps text-label-caps bg-secondary-container/10 text-secondary-container px-2 py-1 rounded">SET</span><span class="font-mono-data-lg text-mono-data-lg text-primary">active_users</span></div><div class="flex flex-wrap gap-2"><div class="px-3 py-1 bg-surface-container rounded-full border border-border-default font-mono-data-sm text-mono-data-sm text-text-secondary">'uid:101'</div><div class="px-3 py-1 bg-surface-container rounded-full border border-border-default font-mono-data-sm text-mono-data-sm text-text-secondary">'uid:102'</div><div class="px-3 py-1 bg-surface-container rounded-full border border-border-default font-mono-data-sm text-mono-data-sm text-text-secondary">'uid:103'</div></div></div>
+<!-- Hash Visualization -->
+<div class="mt-8">
+<div class="flex items-center gap-3 mb-4">
+<span class="font-label-caps text-label-caps bg-accent-info/10 text-accent-info px-2 py-1 rounded">HASH</span>
+<span class="font-mono-data-lg text-mono-data-lg text-primary">user:profile:991</span>
+<span class="font-mono-data-sm text-mono-data-sm text-text-muted">Fields: 3</span>
+</div>
+<div class="w-full max-w-2xl bg-bg-panel border border-border-default rounded overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
+<!-- Table Header -->
+<div class="grid grid-cols-12 bg-bg-surface border-b border-border-default p-3">
+<div class="col-span-4 font-label-caps text-label-caps text-text-muted">FIELD</div>
+<div class="col-span-8 font-label-caps text-label-caps text-text-muted">VALUE</div>
+</div>
+<!-- Table Body -->
+<div class="flex flex-col">
+<!-- Row 1 -->
+<div class="grid grid-cols-12 p-3 border-b border-border-default bg-[#111111] hover:bg-bg-elevated transition-colors group animate-node-entry" style="animation-delay: 0.1s;">
+<div class="col-span-4 font-mono-data-sm text-mono-data-sm text-text-secondary group-hover:text-primary transition-colors">
+                            "username"
+                        </div>
+<div class="col-span-8 font-mono-data-sm text-mono-data-sm text-text-primary">
+                            "admin_sys"
+                        </div>
+</div>
+<!-- Row 2 (Active Edit/Update) -->
+<div class="grid grid-cols-12 p-3 border-b border-border-default bg-[#181818] border-l-2 border-l-[#CCA700] relative animate-node-entry" style="animation-delay: 0.2s;">
+<div class="absolute left-0 top-0 bottom-0 w-[1px] bg-[#CCA700] shadow-[0_0_8px_rgba(204,167,0,0.5)]"></div>
+<div class="col-span-4 font-mono-data-sm text-mono-data-sm text-primary">
+                            "last_login"
+                        </div>
+<div class="col-span-8 font-mono-data-sm text-mono-data-sm text-text-terminal flex items-center gap-2">
+                            "1698745200"
+                            <span class="material-symbols-outlined text-[14px] text-[#CCA700] animate-pulse">edit</span>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="grid grid-cols-12 p-3 bg-[#111111] hover:bg-bg-elevated transition-colors group animate-node-entry" style="animation-delay: 0.3s;">
+<div class="col-span-4 font-mono-data-sm text-mono-data-sm text-text-secondary group-hover:text-primary transition-colors">
+                            "status"
+                        </div>
+<div class="col-span-8 font-mono-data-sm text-mono-data-sm text-text-primary">
+                            "active"
+                        </div>
+</div>
+</div>
+</div>
+<!-- TTL Progress (Urgent) -->
+<div class="mt-4 flex items-center gap-4 max-w-2xl">
+<span class="font-mono-data-sm text-mono-data-sm text-text-secondary w-16">TTL</span>
+<div class="flex-1 h-1 bg-surface-container-high rounded overflow-hidden">
+<div class="h-full w-[15%] ttl-bar-urgent"></div>
+</div>
+<span class="font-mono-data-sm text-mono-data-sm text-[#FF3B3B]">42s</span>
+</div>
+</div>
+<div class="mt-12 opacity-40 grayscale pointer-events-none"><div class="flex items-center gap-3 mb-2"><span class="font-label-caps text-label-caps bg-error-container text-error px-2 py-0.5 rounded">[EVICTED]</span><span class="font-mono-data-lg text-mono-data-lg text-text-muted line-through">expired_cache_key</span></div><div class="h-8 w-64 bg-surface-container-low border border-dashed border-border-default rounded flex items-center px-3"><span class="font-mono-data-sm text-mono-data-sm text-text-muted italic text-[11px]">Memory reclaimed by LRU policy</span></div></div></div>
+</main>
+</body></html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Redis State Explorer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ffb4ab",
+                        "text-secondary": "#888888",
+                        "on-secondary": "#412d00",
+                        "surface-tint": "#DC143C",
+                        "surface-container-lowest": "#1E1E1E",
+                        "bg-elevated": "#1E1E1E",
+                        "text-primary": "#F0F0F0",
+                        "on-tertiary-fixed-variant": "#930010",
+                        "outline": "#849585",
+                        "surface-container-high": "#2a2a2a",
+                        "accent-info": "#4DA6FF",
+                        "text-muted": "#555555",
+                        "background": "#1E1E1E",
+                        "surface-variant": "#353534",
+                        "on-tertiary": "#680008",
+                        "surface-bright": "#3a3939",
+                        "secondary-fixed-dim": "#ffba20",
+                        "secondary": "#ffdb9d",
+                        "bg-panel": "#333333",
+                        "on-tertiary-fixed": "#410003",
+                        "inverse-surface": "#e5e2e1",
+                        "surface-dim": "#1E1E1E",
+                        "text-terminal": "#DC143C",
+                        "inverse-on-surface": "#313030",
+                        "on-error-container": "#ffdad6",
+                        "bg-surface": "#252526",
+                        "surface-container": "#252526",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#5e4200",
+                        "surface-container-low": "#1c1b1b",
+                        "outline-variant": "#3b4b3d",
+                        "on-error": "#690005",
+                        "primary": "#DC143C",
+                        "surface-container-highest": "#353534",
+                        "primary-fixed-dim": "#DC143C",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#271900",
+                        "tertiary-fixed": "#ffdad6",
+                        "on-secondary-container": "#6b4b00",
+                        "primary-container": "#DC143C",
+                        "border-accent": "#3C3C3C",
+                        "tertiary-container": "#ffd5d1",
+                        "on-surface": "#e5e2e1",
+                        "inverse-primary": "#006d37",
+                        "secondary-container": "#feb700",
+                        "on-surface-variant": "#b9cbb9",
+                        "secondary-fixed": "#ffdea8",
+                        "primary-fixed": "#DC143C",
+                        "on-tertiary-container": "#c6031a",
+                        "on-primary-fixed-variant": "#8a001a",
+                        "on-primary-container": "#ffffff",
+                        "tertiary": "#fffaf9",
+                        "tertiary-fixed-dim": "#ffb3ac",
+                        "on-background": "#e5e2e1",
+                        "surface": "#1E1E1E",
+                        "border-default": "#3C3C3C",
+                        "on-primary-fixed": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "32px",
+                        "base-unit": "4px",
+                        "utility-height": "48px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "nav-height": "56px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ['"Segoe UI Variable"', '"Segoe UI"', 'sans-serif'],
+                        "mono-data-sm": ['"Cascadia Code"', 'Consolas', 'monospace'],
+                        "headline-xl": ['"Segoe UI Variable"', '"Segoe UI"', 'sans-serif'],
+                        "headline-lg": ['"Segoe UI Variable"', '"Segoe UI"', 'sans-serif'],
+                        "label-caps": ['"Segoe UI Variable"', '"Segoe UI"', 'sans-serif'],
+                        "mono-data-lg": ['"Cascadia Code"', 'Consolas', 'monospace'],
+                        "headline-md": ['"Segoe UI Variable"', '"Segoe UI"', 'sans-serif'],
+                        "body-default": ['"Segoe UI Variable"', '"Segoe UI"', 'sans-serif']
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "mono-data-sm": ["13px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "headline-xl": ["48px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.25", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "mono-data-lg": ["15px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-default": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(220, 20, 60, 0.04) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(220, 20, 60, 0.04) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-[#1E1E1E] text-text-primary font-body-default text-body-default min-h-screen flex flex-col antialiased selection:bg-[#DC143C] selection:text-white">
+<!-- TopNavBar (From JSON) -->
+<nav class="fixed w-full top-0 border-b border-[#3C3C3C] z-50 bg-[#333333] flex justify-between items-center h-nav-height px-margin-desktop">
+<div class="flex items-center gap-8">
+<div class="font-headline-lg text-headline-lg font-bold text-[#DC143C] drop-shadow-[0_0_8px_rgba(220,20,60,0.8)] tracking-tighter">
+                RSE
+            </div>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-text-secondary hover:text-[#DC143C] transition-colors duration-200 font-label-caps text-label-caps" href="#">Documentation</a>
+<a class="text-text-secondary hover:text-[#DC143C] transition-colors duration-200 font-label-caps text-label-caps" href="#">GitHub</a>
+</div>
+</div>
+<div>
+<button class="bg-[#DC143C] text-white font-label-caps text-label-caps px-4 py-2 rounded-DEFAULT hover:opacity-90 transition-opacity">
+                Launch Lab
+            </button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-nav-height flex flex-col relative overflow-hidden">
+<!-- Subtle Ambient Background Grid -->
+<div class="absolute inset-0 grid-bg pointer-events-none z-0"></div>
+<!-- Hero Section -->
+<section class="relative z-10 flex flex-col items-center justify-center text-center px-margin-mobile md:px-margin-desktop py-24 md:py-32 flex-grow">
+<h1 class="font-headline-xl text-headline-xl tracking-tight mb-6 text-white">
+                Redis State Explorer
+            </h1>
+<p class="font-mono-data-lg text-mono-data-lg text-[#DC143C] mb-12 max-w-2xl bg-[#252526] px-4 py-2 border border-[#3C3C3C] rounded">
+                &gt; Observe Redis. Break Redis. Understand Redis.<span class="animate-pulse">_</span>
+</p>
+<button class="bg-[#DC143C] text-white font-label-caps text-label-caps px-8 py-4 rounded-DEFAULT hover:bg-[#b01030] transition-colors border border-transparent shadow-[0_0_15px_rgba(220,20,60,0.4)]">
+                Launch Lab
+            </button><button class="ml-4 bg-transparent text-white font-label-caps text-label-caps px-8 py-4 rounded-DEFAULT border border-border-default hover:bg-white/5 transition-colors">View Documentation</button>
+</section>
+<!-- Feature Grid -->
+<section class="relative z-10 px-margin-mobile md:px-margin-desktop py-16 bg-[#1E1E1E] border-t border-b border-[#3C3C3C]">
+<div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Card 1 -->
+<div class="bg-[#252526] border border-[#3C3C3C] rounded flex flex-col p-6 hover:border-[#DC143C] transition-colors group">
+<div class="mb-4 text-text-secondary group-hover:text-[#DC143C] transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0, 'wght' 300;">build</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2 text-white">Break &amp; Fix Lab</h3>
+<p class="font-body-default text-body-default text-text-secondary">
+                        Safely inject latency, simulate partitions, and monitor how your data structures react under stress in a sandboxed environment.
+                    </p>
+</div>
+<!-- Card 2 -->
+<div class="bg-[#252526] border border-[#3C3C3C] rounded flex flex-col p-6 hover:border-[#DC143C] transition-colors group">
+<div class="mb-4 text-text-secondary group-hover:text-[#DC143C] transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0, 'wght' 300;">timeline</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2 text-white">Real-Time State Delta</h3>
+<p class="font-body-default text-body-default text-text-secondary">
+                        Track memory allocations and key mutations byte-by-byte as they happen. Zero ambiguity visual diffs of state changes.
+                    </p>
+</div>
+<!-- Card 3 -->
+<div class="bg-[#252526] border border-[#3C3C3C] rounded flex flex-col p-6 hover:border-[#DC143C] transition-colors group">
+<div class="mb-4 text-text-secondary group-hover:text-[#DC143C] transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0, 'wght' 300;">account_tree</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2 text-white">Structural Visualizer</h3>
+<p class="font-body-default text-body-default text-text-secondary">
+                        Inspect complex Hashes, Sets, and Sorted Sets as graphical node structures. Understand deep nesting at a glance.
+                    </p>
+</div>
+</div>
+</section>
+<!-- Workflow Pipeline -->
+<section class="relative z-10 px-margin-mobile md:px-margin-desktop py-24 bg-[#1E1E1E]">
+<div class="max-w-5xl mx-auto">
+<div class="font-label-caps text-label-caps text-text-muted mb-8 text-center uppercase tracking-widest">
+                    Execution Pipeline
+                </div>
+<div class="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0 font-mono-data-sm text-mono-data-sm">
+<div class="flex flex-col items-center gap-2 text-text-secondary">
+<div class="w-12 h-12 rounded border border-[#3C3C3C] bg-[#252526] flex items-center justify-center">
+<span class="material-symbols-outlined text-text-primary">terminal</span>
+</div>
+<span>Command Input</span><span class="text-[10px] text-text-muted font-mono-data-sm mt-1 uppercase opacity-60">Step Layer</span>
+</div>
+<div class="hidden md:block flex-grow h-[1px] bg-[#3C3C3C] mx-4 relative">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 border-t border-r border-[#3C3C3C] rotate-45"></div>
+</div>
+<div class="md:hidden text-[#3C3C3C]"><span class="material-symbols-outlined">arrow_downward</span></div>
+<div class="flex flex-col items-center gap-2 text-text-secondary">
+<div class="w-12 h-12 rounded border border-[#3C3C3C] bg-[#252526] flex items-center justify-center">
+<span class="material-symbols-outlined text-text-primary">difference</span>
+</div>
+<span>State Delta</span><span class="text-[10px] text-text-muted font-mono-data-sm mt-1 uppercase opacity-60">Step Layer</span>
+</div>
+<div class="hidden md:block flex-grow h-[1px] bg-[#3C3C3C] mx-4 relative">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 border-t border-r border-[#3C3C3C] rotate-45"></div>
+</div>
+<div class="md:hidden text-[#3C3C3C]"><span class="material-symbols-outlined">arrow_downward</span></div>
+<div class="flex flex-col items-center gap-2 text-text-secondary">
+<div class="w-12 h-12 rounded border border-[#3C3C3C] bg-[#252526] flex items-center justify-center">
+<span class="material-symbols-outlined text-text-primary">visibility</span>
+</div>
+<span>Visualization</span><span class="text-[10px] text-text-muted font-mono-data-sm mt-1 uppercase opacity-60">Step Layer</span>
+</div>
+<div class="hidden md:block flex-grow h-[1px] bg-[#3C3C3C] mx-4 relative">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 border-t border-r border-[#3C3C3C] rotate-45"></div>
+</div>
+<div class="md:hidden text-[#3C3C3C]"><span class="material-symbols-outlined">arrow_downward</span></div>
+<div class="flex flex-col items-center gap-2 text-[#DC143C]">
+<div class="w-12 h-12 rounded border border-[#DC143C] bg-[#3a0b14] flex items-center justify-center shadow-[0_0_10px_rgba(220,20,60,0.2)]">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<span>Mastery</span><span class="text-[10px] text-text-muted font-mono-data-sm mt-1 uppercase opacity-60">Validation</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="relative z-10 px-margin-mobile md:px-margin-desktop py-12 border-t border-border-default bg-surface text-center flex flex-col gap-4 items-center"><div class="inline-flex gap-6 md:gap-24 items-center justify-center"><a class="text-text-secondary hover:text-primary transition-colors text-label-caps" href="#">GitHub</a><a class="text-text-secondary hover:text-primary transition-colors text-label-caps" href="#">Documentation</a><a class="text-text-secondary hover:text-primary transition-colors text-label-caps" href="#">License</a></div><div class="font-mono-data-sm text-text-muted text-mono-data-sm uppercase tracking-widest">Observe. Break. Understand.</div></footer></body></html>
