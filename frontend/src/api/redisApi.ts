@@ -1,6 +1,10 @@
 // frontend/src/api/redisApi.ts
 
+import type { RedisEntry, RedisSnapshot } from "../types";
+
 const BASE = "http://localhost:3000";
+
+export type { RedisEntry };  // re-export so existing imports don't break
 
 export interface ExecuteResult {
   success: boolean;
@@ -9,12 +13,15 @@ export interface ExecuteResult {
   value?: string | null;
   deleted?: number;
   exists?: boolean;
+  applied?: boolean;
+  seconds?: number;
+  length?: number;
   error?: string;
 }
 
 export interface StateResult {
   success: boolean;
-  state: Record<string, string>;
+  state: RedisSnapshot;
 }
 
 export async function executeCommand(

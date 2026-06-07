@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import type { KeyboardEvent } from "react";
-
 interface CommandConsoleProps {
   onExecute: (raw: string) => void;
   history: string[];
