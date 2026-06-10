@@ -1,10 +1,10 @@
 // frontend/src/App.tsx
 
-import { Workspace } from "./pages/Workspace";
-import "./App.css";
+import { Shell } from './components/Layout/Shell';
+import './App.css';
 
 function App() {
-  return <Workspace />;
+  return <Shell />;
 }
 
 export default App;
