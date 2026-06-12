@@ -73,20 +73,24 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
 
       {/* ── Pipeline ── */}
+{/* ── Pipeline ── */}
       <section className="landing-pipeline">
         <div className="landing-pipeline-label">Execution Pipeline</div>
         <div className="landing-pipeline-steps">
           {PIPELINE_STEPS.map((step, i) => (
-            <div key={step.label} className="landing-pipeline-item">
-              <div className={`landing-pipeline-node ${step.accent ? 'landing-pipeline-node--accent' : ''}`}>
-                <span className={`material-symbols-outlined ${step.accent ? 'landing-pipeline-icon--accent' : ''}`}>
-                  {step.icon}
+            <div key={step.label} className="landing-pipeline-row">
+              <div className="landing-pipeline-item">
+                <div className={`landing-pipeline-node ${step.accent ? 'landing-pipeline-node--accent' : ''}`}>
+                  <span className={`material-symbols-outlined ${step.accent ? 'landing-pipeline-icon--accent' : ''}`}>
+                    {step.icon}
+                  </span>
+                </div>
+                <span className={`landing-pipeline-step-label ${step.accent ? 'landing-pipeline-step-label--accent' : ''}`}>
+                  {step.label}
                 </span>
+                <span className="landing-pipeline-step-sub">{step.sub}</span>
               </div>
-              <span className={`landing-pipeline-step-label ${step.accent ? 'landing-pipeline-step-label--accent' : ''}`}>
-                {step.label}
-              </span>
-              <span className="landing-pipeline-step-sub">{step.sub}</span>
+
               {i < PIPELINE_STEPS.length - 1 && (
                 <div className="landing-pipeline-arrow" />
               )}

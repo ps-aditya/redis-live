@@ -2,31 +2,41 @@
    RSE — complete stylesheet
    Layout: 25% console | 45% state+diff | 30% timeline
 */
-
+/* ── Material Symbols — force font-family so icons render as glyphs, not text ── */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined' !important;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
 /* ── Reset ──────────────────────────────────────────────────────────────────── */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
 body {
   background: #0d0d0d;
   color: #f0f0f0;
   font-family: 'IBM Plex Sans', system-ui, sans-serif;
-  min-height: 100vh;
   font-size: 14px;
 }
-
 code {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
-/* ── Workspace shell ─────────────────────────────────────────────────────────── */
-
-.workspace {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
-}
 
 /* ── Header ─────────────────────────────────────────────────────────────────── */
 
@@ -450,6 +460,7 @@ code {
   flex-direction: column;
   width: 25%;
   min-width: 220px;
+  min-width: 0;
   background: #000000;
   overflow: hidden;
   flex-shrink: 0;
@@ -469,6 +480,7 @@ code {
 .console-line {
   display: flex;
   gap: 8px;
+  min-width: 0;
   margin-bottom: 1px;
 }
 
@@ -479,6 +491,7 @@ code {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
   padding: 10px 12px;
   border-top: 1px solid #1e1e1e;
   background: #080808;
@@ -1086,12 +1099,16 @@ code {
   display: flex;
   flex: 1;
   overflow: hidden;
+  min-height: 0;
+  min-width: 0;
 }
 .shell-page {
   flex: 1;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  min-width: 0;
 }
 .shell-placeholder {
   flex: 1;
@@ -1301,7 +1318,7 @@ code {
 .side-nav-footer-item:hover { background: #2a2d2e; color: #f0f0f0; }
 
 /* ── Landing page ── */
-.landing { flex: 1; display: flex; flex-direction: column; overflow-y: auto; background: #1E1E1E; position: relative; }
+.landing { flex: 1; display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; background: #1E1E1E; position: relative; min-height: 0; }
 .landing-grid-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; background-size: 40px 40px; background-image: linear-gradient(to right, rgba(220,20,60,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(220,20,60,0.04) 1px, transparent 1px); }
 .landing-hero { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 96px 32px; min-height: 65vh; }
 .landing-h1 { font-family: 'IBM Plex Sans', sans-serif; font-size: 48px; font-weight: 700; color: #fff; letter-spacing: -0.02em; margin-bottom: 24px; line-height: 1.2; }
@@ -1322,15 +1339,80 @@ code {
 .landing-feature-desc { font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; color: #888; line-height: 1.5; }
 .landing-pipeline { position: relative; z-index: 1; padding: 80px 32px; background: #1E1E1E; }
 .landing-pipeline-label { font-family: 'IBM Plex Sans', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #555; text-align: center; margin-bottom: 32px; }
-.landing-pipeline-steps { display: flex; align-items: center; justify-content: center; max-width: 900px; margin: 0 auto; gap: 0; }
-.landing-pipeline-item { display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; }
-.landing-pipeline-node { width: 48px; height: 48px; border: 1px solid #3c3c3c; background: #252526; display: flex; align-items: center; justify-content: center; border-radius: 2px; }
-.landing-pipeline-node--accent { border-color: #DC143C; background: #3a0b14; box-shadow: 0 0 10px rgba(220,20,60,0.2); }
-.landing-pipeline-icon--accent { color: #DC143C; }
-.landing-pipeline-step-label { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #888; }
+.landing-pipeline-steps {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 900px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+/* Row = one pipeline item + its trailing arrow, side by side */
+.landing-pipeline-row {
+  display: flex;
+  align-items: flex-start;
+}
+
+.landing-pipeline-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 90px;
+}
+
+.landing-pipeline-node {
+  width: 48px;
+  height: 48px;
+  border: 1px solid #3c3c3c;
+  background: #252526;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+}
+.landing-pipeline-node--accent {
+  border-color: #DC143C;
+  background: #3a0b14;
+  box-shadow: 0 0 10px rgba(220,20,60,0.2);
+}
+.landing-pipeline-node .material-symbols-outlined {
+  font-size: 22px;
+  color: #f0f0f0;
+}
+.landing-pipeline-icon--accent { color: #DC143C !important; }
+
+.landing-pipeline-step-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #888;
+  text-align: center;
+}
 .landing-pipeline-step-label--accent { color: #DC143C; }
-.landing-pipeline-step-sub { font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 0.05em; }
-.landing-pipeline-arrow { flex: 1 1 40px; height: 1px; background: #3c3c3c; min-width: 24px; max-width: 80px; margin: 0 4px; position: relative; align-self: flex-start; margin-top: 24px; }
+
+.landing-pipeline-step-sub {
+  font-size: 10px;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+/* Arrow connector — horizontal line, vertically centered with the node, not the labels */
+.landing-pipeline-arrow {
+  width: 48px;
+  height: 1px;
+  background: #3c3c3c;
+  margin: 24px 12px 0;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .landing-pipeline-steps { flex-direction: column; align-items: center; gap: 24px; }
+  .landing-pipeline-row { flex-direction: column; align-items: center; }
+  .landing-pipeline-arrow { width: 1px; height: 24px; margin: 8px 0; }
+}
 .landing-footer { position: relative; z-index: 1; padding: 48px 32px; border-top: 1px solid #3c3c3c; background: #1E1E1E; display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .landing-footer-links { display: flex; gap: 48px; }
 .landing-footer-link { font-family: 'IBM Plex Sans', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.05em; color: #555; text-decoration: none; transition: color 0.15s; }
@@ -1338,7 +1420,7 @@ code {
 .landing-footer-tagline { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #444; text-transform: uppercase; letter-spacing: 0.12em; }
 
 /* ── Lab workspace sub-nav ── */
-.lab-workspace { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+.lab-workspace { display: flex; flex-direction: column; flex: 1; overflow: hidden; min-height: 0; }
 .lab-subnav { height: 40px; background: #252526; border-bottom: 1px solid #3c3c3c; display: flex; align-items: center; padding: 0 12px; gap: 2px; flex-shrink: 0; }
 .lab-subnav-tab { background: transparent; border: none; color: #666; font-family: 'IBM Plex Sans', sans-serif; font-size: 12px; font-weight: 500; padding: 4px 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; border-radius: 2px; transition: color 0.12s, background 0.12s; }
 .lab-subnav-tab:hover { color: #f0f0f0; }
@@ -1351,7 +1433,7 @@ code {
 .lab-btn-replay:disabled { opacity: 0.35; cursor: not-allowed; }
 
 /* ── Visualizer page ── */
-.visualizer-page { display: flex; flex-direction: column; flex: 1; overflow: hidden; background: #1e1e1e; }
+.visualizer-page { display: flex; flex-direction: column; flex: 1; overflow: hidden; background: #1e1e1e; min-height: 0; }
 .viz-title-bar { height: 40px; background: #252526; border-bottom: 1px solid #3c3c3c; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; flex-shrink: 0; }
 .viz-title-left, .viz-title-right { display: flex; align-items: center; gap: 8px; }
 .viz-title-text { font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; font-weight: 600; color: #f0f0f0; }
@@ -1396,7 +1478,7 @@ code {
 .viz-ttl-fill { height: 100%; border-radius: 99px; transition: width 1s linear; }
 
 /* ── Experiment page ── */
-.experiment-page { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+.experiment-page { display: flex; flex-direction: column; flex: 1; overflow: hidden; min-height: 0; }
 .exp-module-bar { height: 48px; background: #252526; border-bottom: 1px solid #3c3c3c; display: flex; align-items: center; padding: 0 16px; gap: 12px; flex-shrink: 0; position: relative; }
 .exp-module-back { background: transparent; border: none; color: #888; cursor: pointer; padding: 4px; display: flex; }
 .exp-module-back:hover { color: #f0f0f0; }
@@ -1479,3 +1561,90 @@ code {
 .exp-live-node-value { color: #fff; }
 .exp-live-connector { width: 32px; height: 1px; background: #3c3c3c; flex-shrink: 0; position: relative; }
 .exp-live-connector::after { content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 6px; height: 6px; border-top: 1px solid #3c3c3c; border-right: 1px solid #3c3c3c; transform: translateY(-50%) rotate(45deg); }
+
+/* ════════════════════════════════════════════════════════
+   PHASE 3 ADDITIONS — Terminal syntax highlighting + cursor
+   ════════════════════════════════════════════════════════ */
+
+/* ── Syntax token colors (history + live input) ── */
+.tok-keyword { color: #C586C0; }              /* SET, GET, LPUSH... */
+.tok-key     { color: #9CDCFE; }              /* the key name */
+.tok-number  { color: #B5CEA8; }              /* integer args */
+.tok-string  { color: #CE9178; }              /* string args / values */
+
+/* History lines now carry their own token colors —
+   .console-text no longer forces a single green color */
+.console-text {
+  word-break: normal;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  color: #a8ff78; /* fallback for any untokenized text */
+  min-width: 0;
+}
+
+/* ── Input row: overlay + real input stacked ── */
+.console-input-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-height: 20px;
+}
+
+/* The real input: transparent text so only the overlay is visible,
+   but caret, selection, and typing all work normally */
+.console-input {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  color: transparent;
+  caret-color: #dc143c;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 14px;
+  padding: 0;
+}
+.console-input::placeholder {
+  color: #333333;
+}
+/* When showing the placeholder, the overlay has nothing to render,
+   so make the placeholder visible (it's part of the real input) */
+.console-input:placeholder-shown {
+  color: #333333;
+}
+
+/* The highlighted overlay: visually identical position/font to the input,
+   sits behind it, displays colored tokens */
+.console-input-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  pointer-events: none;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 14px;
+  white-space: pre;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  color: #f0f0f0; /* fallback for untyped/untokenized chars */
+}
+
+/* ── Blinking terminal cursor ── */
+.console-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 16px;
+  background: #dc143c;
+  margin-left: 1px;
+  vertical-align: middle;
+  animation: console-cursor-blink 1s step-end infinite;
+}
+
+@keyframes console-cursor-blink {
+  0%, 50%  { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
