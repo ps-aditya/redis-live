@@ -184,7 +184,13 @@ export function LabWorkspace({ redisState, sandbox }: LabWorkspaceProps) {
         <div className="workspace-body">
           <CommandConsole onExecute={handleExecute} history={history} isLoading={isExecuting} />
           <div className="center-column">
-            <StateViewer state={displayState} isLoading={isLoadingState && !isReplaying} lastUpdated={lastUpdated} />
+            <StateViewer
+              state={displayState}
+              isLoading={isLoadingState && !isReplaying}
+              lastUpdated={lastUpdated}
+              latestDiff={latestDiff}
+              onExecute={handleExecute}
+            />
             <DiffPanel diff={latestDiff} />
           </div>
           <TimelinePanel

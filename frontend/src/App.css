@@ -1648,3 +1648,641 @@ code {
   0%, 50%  { opacity: 1; }
   50.01%, 100% { opacity: 0; }
 }
+/* ════════════════════════════════════════════════════════
+   PHASE 4 ADDITIONS — Mutation pulses, Key Inspector
+   ════════════════════════════════════════════════════════ */
+
+/* ── Row-pulse mutation flashes ── */
+@keyframes row-pulse-new-anim {
+  0%   { background-color: rgba(0, 255, 136, 0.18); border-color: #00ff88; }
+  100% { background-color: transparent; border-color: #242424; }
+}
+@keyframes row-pulse-changed-anim {
+  0%   { background-color: rgba(255, 184, 0, 0.16); border-color: #ffb800; }
+  100% { background-color: transparent; border-color: #242424; }
+}
+
+.row-pulse-new {
+  animation: row-pulse-new-anim 1.8s ease-out forwards;
+}
+.row-pulse-changed {
+  animation: row-pulse-changed-anim 1.8s ease-out forwards;
+}
+
+/* ── Card header: now clickable to expand ── */
+.card-header--clickable {
+  cursor: pointer;
+  user-select: none;
+}
+.card-header--clickable:hover .card-key {
+  color: #6fb8ff;
+}
+.card-expand-icon {
+  font-size: 18px !important;
+  color: #555;
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+.card-header--clickable:hover .card-expand-icon {
+  color: #f0f0f0;
+}
+
+/* ── Key Inspector (expanded accordion content) ── */
+.key-inspector {
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid #242424;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: card-appear 0.2s ease-out;
+}
+
+.key-inspector-meta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: #242424;
+  border: 1px solid #242424;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.key-inspector-meta-cell {
+  background: #161616;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.key-inspector-meta-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #555;
+}
+.key-inspector-meta-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #f0f0f0;
+}
+
+.key-inspector-value {
+  border: 1px solid #242424;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.key-inspector-value-header {
+  background: #1e1e1e;
+  padding: 5px 10px;
+  border-bottom: 1px solid #242424;
+}
+.key-inspector-value-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #555;
+}
+.key-inspector-value-body {
+  background: #0a0a0a;
+  color: #a8ff78;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 10px;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.key-inspector-actions {
+  display: flex;
+  gap: 8px;
+}
+.key-inspector-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid #3a3a3a;
+  color: #888;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.key-inspector-btn:hover {
+  border-color: #888;
+  color: #f0f0f0;
+}
+.key-inspector-btn--danger {
+  border-color: #ff3b3b;
+  color: #ff3b3b;
+  margin-left: auto;
+}
+.key-inspector-btn--danger:hover {
+  background: rgba(255, 59, 59, 0.1);
+  color: #ff3b3b;
+}
+/* ════════════════════════════════════════════════════════
+   PHASE 5 ADDITIONS — Execution trace, WRONGTYPE banner, block pulses
+   ════════════════════════════════════════════════════════ */
+
+/* ── Execution trace: now two rows (steps+latency, then command text) ── */
+.viz-trace-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.viz-trace-command {
+  margin-top: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #a8ff78;
+}
+.viz-trace-command-text { color: #f0f0f0; }
+.viz-trace-command-empty { color: #555; font-style: italic; }
+
+/* Step states */
+.viz-trace-step {
+  padding: 3px 10px;
+  border: 1px solid #3c3c3c;
+  color: #555;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  border-radius: 2px;
+  margin-right: -1px;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.viz-trace-step--done {
+  color: #4DA6FF;
+  border-color: rgba(77,166,255,0.3);
+  background: rgba(77,166,255,0.05);
+}
+.viz-trace-step--active {
+  color: #DC143C;
+  border-color: #DC143C;
+  background: rgba(220,20,60,0.1);
+}
+.viz-trace-step--pulse {
+  animation: viz-trace-pulse 0.4s ease-out;
+}
+@keyframes viz-trace-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(220,20,60,0.5); }
+  100% { box-shadow: 0 0 0 6px rgba(220,20,60,0); }
+}
+
+/* ── WRONGTYPE banner ── */
+.viz-wrongtype-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(255,59,59,0.08);
+  border-left: 3px solid #FF3B3B;
+  border-bottom: 1px solid #3c3c3c;
+  padding: 10px 16px;
+  flex-shrink: 0;
+  animation: viz-banner-slide-in 0.25s ease-out;
+}
+@keyframes viz-banner-slide-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.viz-wrongtype-icon {
+  color: #FF3B3B;
+  font-size: 20px !important;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.viz-wrongtype-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+.viz-wrongtype-text strong {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  color: #FF3B3B;
+  letter-spacing: 0.04em;
+}
+.viz-wrongtype-text span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #ccc;
+}
+.viz-wrongtype-dismiss {
+  background: transparent;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 2px;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+.viz-wrongtype-dismiss:hover { color: #f0f0f0; }
+
+/* ── Block-level pulse (String/Set whole-block flash) ── */
+@keyframes viz-block-pulse-new {
+  0%   { box-shadow: 0 0 0 1px #00FF88, 0 0 16px rgba(0,255,136,0.25); }
+  100% { box-shadow: 0 0 0 1px transparent, 0 0 0 rgba(0,255,136,0); }
+}
+@keyframes viz-block-pulse-changed {
+  0%   { box-shadow: 0 0 0 1px #FFB800, 0 0 16px rgba(255,184,0,0.25); }
+  100% { box-shadow: 0 0 0 1px transparent, 0 0 0 rgba(255,184,0,0); }
+}
+.viz-block-pulse--new     { animation: viz-block-pulse-new 1.6s ease-out forwards; border-radius: 4px; }
+.viz-block-pulse--changed { animation: viz-block-pulse-changed 1.6s ease-out forwards; border-radius: 4px; }
+
+/* ── List node slide-in (per-node, staggered) ── */
+@keyframes viz-node-enter-anim {
+  from { opacity: 0; transform: translateY(-6px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.viz-node-enter {
+  animation: viz-node-enter-anim 0.3s ease-out backwards;
+}
+
+/* ── Hash row flash + edit icon ── */
+@keyframes viz-hash-row-pulse-anim {
+  0%   { background: rgba(255,184,0,0.12); border-left-color: #FFB800; }
+  100% { background: transparent; border-left-color: transparent; }
+}
+.viz-hash-row-pulse {
+  border-left: 2px solid transparent;
+  animation: viz-hash-row-pulse-anim 1.8s ease-out forwards;
+}
+.viz-hash-edit-icon {
+  font-size: 13px !important;
+  color: #FFB800;
+  margin-left: 6px;
+  vertical-align: middle;
+  animation: viz-edit-icon-flash 1.8s ease-out forwards;
+}
+@keyframes viz-edit-icon-flash {
+  0%, 70% { opacity: 1; }
+  100%    { opacity: 0; }
+}
+/* ════════════════════════════════════════════════════════
+   PHASE 6 ADDITIONS — Experiment Library + generalized runner
+   ════════════════════════════════════════════════════════ */
+
+/* ── Experiment library page ── */
+.exp-library-page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  background: #0d0d0d;
+}
+.exp-library-page-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #2a2a2a;
+  background: #111111;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.exp-library-page-header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.exp-library-page-title {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #f0f0f0;
+  margin-bottom: 4px;
+}
+.exp-library-page-sub {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  color: #555;
+}
+.exp-library-filters {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.exp-library-filter-btn {
+  background: transparent;
+  border: 1px solid #2a2a2a;
+  color: #666;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s;
+}
+.exp-library-filter-btn:hover { border-color: #555; color: #f0f0f0; }
+.exp-library-filter-btn--active { border-color: #DC143C; color: #DC143C; background: rgba(220,20,60,0.06); }
+
+.exp-library-grid-page {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 12px;
+  padding: 20px 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.exp-library-card {
+  background: #111111;
+  border: 1px solid #2a2a2a;
+  border-left: 3px solid #DC143C;
+  border-radius: 4px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.15s;
+}
+.exp-library-card:hover { border-color: #3a3a3a; border-left-color: #DC143C; }
+.exp-library-card-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.exp-library-card-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #444;
+  min-width: 24px;
+}
+.exp-library-card-question {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #f0f0f0;
+  line-height: 1.4;
+}
+.exp-library-card-hyp {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  color: #888;
+  line-height: 1.5;
+  background: #181818;
+  border: 1px solid #2a2a2a;
+  padding: 8px 10px;
+  border-radius: 2px;
+}
+.exp-library-card-desc {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.5;
+}
+.exp-library-card-commands {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.exp-start-btn {
+  background: #DC143C;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 2px;
+  margin-top: 2px;
+  align-self: flex-start;
+  transition: background 0.15s;
+}
+.exp-start-btn:hover { background: #a50f2e; }
+
+/* ── Reflection strip ── */
+.exp-reflection-strip {
+  background: rgba(0,255,136,0.04);
+  border-bottom: 1px solid rgba(0,255,136,0.15);
+  padding: 10px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex-shrink: 0;
+  animation: card-appear 0.3s ease-out;
+}
+.exp-reflection-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #00ff88;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+.exp-reflection-questions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.exp-reflection-q {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  color: #888;
+  background: #181818;
+  border: 1px solid #2a2a2a;
+  border-left: 2px solid #ffb800;
+  padding: 5px 10px;
+  border-radius: 2px;
+  line-height: 1.4;
+}
+
+/* ── Checklist: step shows the command itself ── */
+.exp-check-cmd {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #a8ff78;
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  padding: 3px 8px;
+  border-radius: 2px;
+  margin-top: 4px;
+  word-break: break-all;
+}
+.exp-check-cmd--locked { color: #444; }
+
+/* Briefing hypothesis block */
+.exp-briefing-hypothesis {
+  background: #181818;
+  border: 1px solid #2a2a2a;
+  padding: 8px 12px;
+  border-radius: 2px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  color: #888;
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+
+/* ── Live viz panel: multi-block layout ── */
+.exp-live-multi-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+.exp-viz-block {
+  background: #181818;
+  border: 1px solid #2a2a2a;
+  border-radius: 3px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.exp-viz-block-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.exp-viz-badge {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 2px 6px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.exp-viz-badge--string { background: rgba(206,145,120,0.15); color: #CE9178; }
+.exp-viz-badge--list   { background: rgba(197,134,192,0.15); color: #C586C0; }
+.exp-viz-badge--hash   { background: rgba(86,156,214,0.15);  color: #569CD6; }
+.exp-viz-badge--set    { background: rgba(78,201,176,0.15);  color: #4EC9B0; }
+.exp-viz-key    { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #4da6ff; flex: 1; }
+.exp-viz-meta   { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #555; }
+.exp-viz-ttl    { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #ffb800; }
+.exp-viz-string-value { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #a8ff78; }
+.exp-viz-set-pills { display: flex; flex-wrap: wrap; gap: 4px; }
+.exp-viz-pill { font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 2px 8px; background: rgba(78,201,176,0.08); border: 1px solid rgba(78,201,176,0.25); color: #4ec9b0; border-radius: 99px; }
+.exp-viz-hash { display: flex; flex-direction: column; gap: 2px; }
+.exp-viz-hash-row { display: flex; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 2px 0; }
+.exp-viz-hash-field { color: #4da6ff; min-width: 80px; }
+.exp-viz-hash-val   { color: #ce9178; }
+.exp-live-nodes-row { display: flex; align-items: center; }
+.exp-viz-key-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: #4da6ff;
+  background: rgba(77,166,255,0.08);
+  border: 1px solid rgba(77,166,255,0.2);
+  padding: 1px 6px;
+  border-radius: 2px;
+}
+/* ════════════════════════════════════════════════════════
+   PHASE 7 ADDITIONS — Landing animations, sandbox indicator
+   ════════════════════════════════════════════════════════ */
+
+/* ── Landing hero entrance animations ── */
+
+/* Hero section fades up as a unit */
+.landing-hero {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.landing-hero--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* h1: slides up slightly, delayed so it's the first element to appear */
+@keyframes landing-h1-enter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.landing-h1--animate {
+  animation: landing-h1-enter 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+/* Tagline: fades in after h1 */
+@keyframes landing-tagline-enter {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.landing-tagline--animate {
+  animation: landing-tagline-enter 0.4s ease-out 0.5s both;
+}
+
+/* CTAs: slide up last */
+@keyframes landing-ctas-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.landing-ctas--animate {
+  animation: landing-ctas-enter 0.4s ease-out 0.85s both;
+}
+
+/* Cursor states: solid during typing, blinking when done */
+.landing-cursor--solid {
+  opacity: 1;
+}
+.landing-cursor--blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* Feature cards: staggered entrance driven by inline animation-delay */
+@keyframes landing-card-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.landing-feature-card {
+  animation: landing-card-enter 0.4s ease-out both;
+}
+/* Note: animation-delay is set inline per card (0.1s, 0.22s, 0.34s) */
+
+/* ── Sandbox seeding indicator ── */
+
+/* Pulsing dot that appears inside the sandbox select wrapper */
+.top-nav-seeding-dot {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #FFB800;
+  animation: seeding-pulse 0.8s ease-in-out infinite alternate;
+  z-index: 3;
+}
+@keyframes seeding-pulse {
+  from { opacity: 1; transform: translateY(-50%) scale(1); }
+  to   { opacity: 0.4; transform: translateY(-50%) scale(0.7); }
+}
+
+/* Disabled/loading state for the select */
+.top-nav-select--loading {
+  opacity: 0.5;
+  cursor: not-allowed;
+  padding-left: 22px; /* make room for the dot */
+}
+
+/* Disabled state for FLUSHALL during seeding */
+.top-nav-btn-danger:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}

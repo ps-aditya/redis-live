@@ -1,5 +1,9 @@
 // frontend/src/pages/LandingPage.tsx
 
+import { useState, useEffect } from 'react';
+
+const TAGLINE = '> Observe Redis. Break Redis. Understand Redis.';
+
 const FEATURE_CARDS = [
   {
     icon: 'build',
@@ -19,10 +23,10 @@ const FEATURE_CARDS = [
 ];
 
 const PIPELINE_STEPS = [
-  { icon: 'terminal',     label: 'Command Input', sub: 'Step Layer',  accent: false },
-  { icon: 'difference',   label: 'State Delta',   sub: 'Step Layer',  accent: false },
-  { icon: 'visibility',   label: 'Visualization', sub: 'Step Layer',  accent: false },
-  { icon: 'check_circle', label: 'Mastery',        sub: 'Validation',  accent: true  },
+  { icon: 'terminal',     label: 'Command Input', sub: 'Step Layer', accent: false },
+  { icon: 'difference',   label: 'State Delta',   sub: 'Step Layer', accent: false },
+  { icon: 'visibility',   label: 'Visualization', sub: 'Step Layer', accent: false },
+  { icon: 'check_circle', label: 'Mastery',        sub: 'Validation', accent: true  },
 ];
 
 interface LandingPageProps {
@@ -30,6 +34,38 @@ interface LandingPageProps {
 }
 
 export function LandingPage({ onNavigate }: LandingPageProps) {
+  // Typewriter state
+  const [typedText, setTypedText]     = useState('');
+  const [typingDone, setTypingDone]   = useState(false);
+
+  // Entrance animation trigger
+  const [heroVisible, setHeroVisible] = useState(false);
+
+  // Typewriter: starts after a short delay so the hero h1 can enter first
+  useEffect(() => {
+    // Trigger hero entrance
+    const heroTimer = setTimeout(() => setHeroVisible(true), 100);
+
+    // Start typewriter after h1 has entered
+    let i = 0;
+    const typeTimer = setTimeout(() => {
+      const interval = setInterval(() => {
+        i++;
+        setTypedText(TAGLINE.slice(0, i));
+        if (i >= TAGLINE.length) {
+          clearInterval(interval);
+          setTypingDone(true);
+        }
+      }, 32); // ~32ms per character = full tagline in ~1.4s
+      return () => clearInterval(interval);
+    }, 600);
+
+    return () => {
+      clearTimeout(heroTimer);
+      clearTimeout(typeTimer);
+    };
+  }, []);
+
   return (
     <div className="landing">
 
@@ -37,13 +73,21 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
       <div className="landing-grid-bg" />
 
       {/* ── Hero ── */}
-      <section className="landing-hero">
-        <h1 className="landing-h1">Redis State Explorer</h1>
-        <p className="landing-tagline">
-          &gt; Observe Redis. Break Redis. Understand Redis.<span className="landing-cursor">_</span>
+      <section className={`landing-hero ${heroVisible ? 'landing-hero--visible' : ''}`}>
+        <h1 className="landing-h1 landing-h1--animate">Redis State Explorer</h1>
+
+        <p className="landing-tagline landing-tagline--animate">
+          {typedText}
+          <span className={`landing-cursor ${typingDone ? 'landing-cursor--blink' : 'landing-cursor--solid'}`}>
+            _
+          </span>
         </p>
-        <div className="landing-ctas">
-          <button className="landing-btn-primary" onClick={() => onNavigate('lab')}>
+
+        <div className="landing-ctas landing-ctas--animate">
+          <button
+            className="landing-btn-primary"
+            onClick={() => onNavigate('lab')}
+          >
             Launch Lab
           </button>
           <button className="landing-btn-secondary">
@@ -55,8 +99,12 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
       {/* ── Feature cards ── */}
       <section className="landing-features">
         <div className="landing-features-grid">
-          {FEATURE_CARDS.map((card) => (
-            <div key={card.title} className="landing-feature-card">
+          {FEATURE_CARDS.map((card, i) => (
+            <div
+              key={card.title}
+              className="landing-feature-card"
+              style={{ animationDelay: `${0.1 + i * 0.12}s` }}
+            >
               <div className="landing-feature-icon">
                 <span
                   className="material-symbols-outlined"
@@ -73,7 +121,6 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
 
       {/* ── Pipeline ── */}
-{/* ── Pipeline ── */}
       <section className="landing-pipeline">
         <div className="landing-pipeline-label">Execution Pipeline</div>
         <div className="landing-pipeline-steps">
@@ -90,7 +137,6 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
                 </span>
                 <span className="landing-pipeline-step-sub">{step.sub}</span>
               </div>
-
               {i < PIPELINE_STEPS.length - 1 && (
                 <div className="landing-pipeline-arrow" />
               )}
