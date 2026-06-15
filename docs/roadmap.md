@@ -1,153 +1,126 @@
 # Roadmap
 
-## Current Stage
-
-Project Foundation
-
-Status: In Progress
-
-Goals:
-
-* Define project vision
-* Establish architecture
-* Complete documentation
-* Create initial designs
-* Publish repository
-
-Success Criteria:
-
-A new contributor can understand the project's purpose and direction within five minutes.
+This document tracks what has been built, what is in progress, and where RSE is going.
 
 ---
 
-# Phase 1
+## Completed
 
-Core Redis Playground
+All seven phases of the initial build plan are complete.
 
-Goal:
+### Phase 1 — Core Lab
+- [x] Redis command execution (SET, GET, DEL, EXISTS, EXPIRE, LPUSH, RPOP)
+- [x] Live keyspace state panel with 2-second polling
+- [x] Command history with syntax highlighting
+- [x] State diff — added / modified / deleted on every command
+- [x] Command timeline with before/after snapshots
+- [x] Timeline replay mode
 
-Allow users to interact directly with Redis.
+### Phase 2 — Navigation Shell
+- [x] Landing page with hero, feature grid, execution pipeline
+- [x] Tab-state routing (Shell) — state persists across page switches
+- [x] TopNavBar (horizontal) for Landing + Lab
+- [x] SideNavBar (vertical) for Visualizer + Experiment pages
+- [x] Sandbox dropdown (Default / E-Commerce / Chaos)
+- [x] Four page scaffolds: Landing, Lab, Visualizer, Experiment
 
-Deliverables:
+### Phase 3 — Terminal Polish
+- [x] Syntax-highlighted terminal input (real-time token coloring)
+- [x] Syntax-highlighted history output
+- [x] Auto-scroll to latest command
+- [x] Blinking crimson cursor block
 
-* Redis connection
-* Command execution
-* Command history
-* State viewer
-* Environment reset
+### Phase 4 — Key Inspector
+- [x] Mutation flash colors (green = new, yellow = modified)
+- [x] Key Inspector accordion — click any card to expand
+- [x] Inspector shows TTL, encoding estimate, size estimate, field count
+- [x] Raw value viewer inside inspector
+- [x] Copy Name + Delete Key (DEL) actions inside inspector
+- [x] Smooth 1-second client-side TTL interpolation
 
-Success Criteria:
+### Phase 5 — Structure Visualizer
+- [x] Execution trace pipeline driven by real command timeline
+- [x] WRONGTYPE error banner — dismissible, re-appears on next error
+- [x] Block-level mutation pulses (green/yellow glow on structure blocks)
+- [x] List node staggered slide-in animation on change
+- [x] Hash row flash + edit icon on field modification
 
-Users can execute commands and immediately observe state changes.
+### Phase 6 — Experiment Library
+- [x] 10 guided experiments across Strings, Lists, Sets, Hashes, TTL, Errors, Caching
+- [x] Library picker with difficulty filter (Beginner / Intermediate / Advanced)
+- [x] Generalized step-by-step runner for any experiment
+- [x] Sequential verification checklist with lock/unlock logic
+- [x] Reflection questions on experiment completion
+- [x] Live structure visualizer scoped to experiment keys
+- [x] Production context panel per experiment
+- [x] Terminal input placeholder shows next expected command
 
----
-
-# Phase 2
-
-State Visualization
-
-Goal:
-
-Make Redis behavior observable.
-
-Deliverables:
-
-* String visualization
-* List visualization
-* Set visualization
-* Hash visualization
-* TTL visualization
-
-Success Criteria:
-
-Users can understand Redis data structures without reading documentation.
-
----
-
-# Phase 3
-
-Experiments
-
-Goal:
-
-Transform Redis concepts into interactive investigations.
-
-Deliverables:
-
-* Guided experiments
-* Discovery prompts
-* State challenges
-* Exploration workflows
-
-Example Experiments:
-
-* Can Redis behave like a queue?
-* What happens when a key expires?
-* Why are Sets unique?
-
-Success Criteria:
-
-Users learn concepts through experimentation rather than instruction.
+### Phase 7 — Polish + Sandbox + Performance
+- [x] Landing page typewriter animation
+- [x] Staggered entrance animations (hero, feature cards)
+- [x] E-Commerce sandbox — 14 realistic keys (sessions, products, carts, queue, set, cache, rate limits)
+- [x] Chaos sandbox — 50 keys with volatile TTLs (5–60s)
+- [x] Real FLUSHALL wired to nav button
+- [x] Seeding indicator in sandbox dropdown
+- [x] React.memo on card sub-components
+- [x] useMemo on keyspace entries
+- [x] Persistent keys excluded from TTL re-render cycle
 
 ---
 
-# Phase 4
+## Current Milestone — Public Launch
 
-Public Launch
+These are the items blocking the first public release.
 
-Goal:
-
-Deploy the first public version.
-
-Deliverables:
-
-* Production deployment
-* Landing page
-* Documentation site
-* Public feedback collection
-
-Success Criteria:
-
-External users can access and use RSE without assistance.
+- [ ] **Production deployment** — Railway / Render / Fly.io with a managed Redis instance
+- [ ] **Screenshots** — 6 screenshots for README (landing, lab, inspector, visualizer, experiment library, experiment runner)
+- [ ] **Demo GIF** — 35-second recording of core flow (see `docs/assets/MEDIA_GUIDE.md`)
+- [ ] **Custom domain** (optional but improves credibility)
+- [ ] **GitHub repository polish** — description, topics, social preview image
 
 ---
 
-# Phase 5
+## Next Features
 
-Advanced Redis Systems
+These are confirmed directions, not scheduled.
 
-Goal:
+### Redis Commands
+- `HGET` / `HGETALL` / `HDEL` from the terminal (currently HSET-only)
+- `SADD` / `SREM` / `SMEMBERS` from the terminal
+- `LPOP` / `LLEN` from the terminal
+- `KEYS *` / `SCAN` with pattern filtering
 
-Expose deeper Redis internals.
+### Visualization
+- Pub/Sub visualization — publish a message and watch subscribers receive it
+- Streams visualization — append entries, read groups, consumer lag
+- Eviction policy simulation — set `maxmemory` and watch LRU/LFU behavior
+- Persistence visualization — RDB snapshot timing, AOF append behavior
 
-Deliverables:
+### Experiments
+- `INCR` / `DECR` — atomic counters
+- Pub/Sub — how messages travel
+- Sorted Sets — leaderboard pattern
+- Stream as event log — append-only audit trail
 
-* Memory behavior visualizations
-* Eviction policy simulations
-* Persistence visualizations
-* Replication visualizations
-* Cluster visualizations
-
-Success Criteria:
-
-Users can understand advanced Redis concepts through observation.
+### Product
+- Shareable experiment URLs — deep-link to a specific experiment
+- Dark/light mode toggle
+- Keyboard shortcuts in the terminal (↑/↓ for history, Ctrl+L to clear)
+- Mobile-responsive layout
 
 ---
 
-# Long-Term Vision
+## Long-Term Vision
 
-Redis State Explorer evolves from a Redis experimentation environment into a broader systems exploration platform.
+Redis State Explorer evolves from a Redis learning tool into a broader systems exploration platform.
 
-Potential Areas:
+The core idea — make opaque systems visible through observation — applies well beyond Redis:
 
-* Redis
-* Docker
-* Linux
-* Networking
-* Distributed Systems
-* Caching Architectures
+- **Docker** — watch container state, port bindings, and network topology change in real time
+- **Linux** — observe process trees, file descriptors, and system calls
+- **Networking** — trace packets through a request lifecycle
+- **Distributed systems** — visualize consensus, replication lag, partition behavior
 
-Mission:
+The mission remains the same:
 
-Make infrastructure systems observable, understandable, and approachable through experimentation.
-
+> Make infrastructure systems observable, understandable, and approachable through experimentation.
