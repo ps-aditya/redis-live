@@ -2,6 +2,7 @@
 
 const KEYWORDS = new Set([
   "SET", "GET", "DEL", "EXISTS", "EXPIRE", "LPUSH", "RPOP",
+  "LPOP", "LLEN", "HSET", "HGET", "SADD", "SREM", "FLUSHALL",
 ]);
 
 export type TokenType = "keyword" | "key" | "string" | "number" | "text";

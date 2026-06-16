@@ -43,10 +43,10 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
 
   // Typewriter: starts after a short delay so the hero h1 can enter first
   useEffect(() => {
-    // Trigger hero entrance
-    const heroTimer = setTimeout(() => setHeroVisible(true), 100);
+    // Trigger hero entrance immediately
+    const heroTimer = setTimeout(() => setHeroVisible(true), 50);
 
-    // Start typewriter after h1 has entered
+    // Start typewriter almost immediately — don't wait for entrance to settle
     let i = 0;
     const typeTimer = setTimeout(() => {
       const interval = setInterval(() => {
@@ -56,9 +56,9 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
           clearInterval(interval);
           setTypingDone(true);
         }
-      }, 32); // ~32ms per character = full tagline in ~1.4s
+      }, 20); // ~20ms per character = full tagline in ~0.95s
       return () => clearInterval(interval);
-    }, 600);
+    }, 200);
 
     return () => {
       clearTimeout(heroTimer);
@@ -86,12 +86,15 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
         <div className="landing-ctas landing-ctas--animate">
           <button
             className="landing-btn-primary"
+            onClick={() => onNavigate('experiment')}
+          >
+            Start Learning
+          </button>
+          <button
+            className="landing-btn-secondary"
             onClick={() => onNavigate('lab')}
           >
-            Launch Lab
-          </button>
-          <button className="landing-btn-secondary">
-            View Documentation
+            Open Lab →
           </button>
         </div>
       </section>
@@ -145,12 +148,35 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
         </div>
       </section>
 
+      {/* ── Author / Contact ── */}
+      <section className="landing-author">
+        <div className="landing-author-card">
+          <div className="landing-author-text">
+            <span className="landing-author-label">Built by</span>
+            <span className="landing-author-name">Aditya P. S.</span>
+            <p className="landing-author-desc">
+              RSE is free and open source. Questions, feedback, or ideas for new experiments - reach out.
+            </p>
+          </div>
+          <div className="landing-author-links">
+            <a href="https://www.linkedin.com/company/redis-state-explorer" className="landing-author-link" target="_blank" rel="noopener noreferrer">
+              <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>link</span>
+              LinkedIn
+            </a>
+            <a href="https://github.com/ps-aditya/redis-state-explorer" className="landing-author-link" target="_blank" rel="noopener noreferrer">
+              <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>code</span>
+              GitHub
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* ── Footer ── */}
       <footer className="landing-footer">
         <div className="landing-footer-links">
-          <a href="#" className="landing-footer-link">GitHub</a>
-          <a href="#" className="landing-footer-link">Documentation</a>
-          <a href="#" className="landing-footer-link">License</a>
+          <a href="https://github.com/ps-aditya/redis-state-explorer" className="landing-footer-link">GitHub</a>
+          <a href="https://github.com/ps-aditya/redis-state-explorer#readme" className="landing-footer-link">Documentation</a>
+          <a href="https://github.com/ps-aditya/redis-state-explorer/blob/main/LICENSE" className="landing-footer-link">License</a>
         </div>
         <div className="landing-footer-tagline">Observe. Break. Understand.</div>
       </footer>

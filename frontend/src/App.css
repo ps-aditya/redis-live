@@ -2214,7 +2214,7 @@ code {
   to   { opacity: 1; transform: translateY(0); }
 }
 .landing-h1--animate {
-  animation: landing-h1-enter 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  animation: landing-h1-enter 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
 }
 
 /* Tagline: fades in after h1 */
@@ -2223,7 +2223,7 @@ code {
   to   { opacity: 1; }
 }
 .landing-tagline--animate {
-  animation: landing-tagline-enter 0.4s ease-out 0.5s both;
+  animation: landing-tagline-enter 0.4s ease-out 0.15s both;
 }
 
 /* CTAs: slide up last */
@@ -2232,7 +2232,7 @@ code {
   to   { opacity: 1; transform: translateY(0); }
 }
 .landing-ctas--animate {
-  animation: landing-ctas-enter 0.4s ease-out 0.85s both;
+  animation: landing-ctas-enter 0.4s ease-out 1.2s both;
 }
 
 /* Cursor states: solid during typing, blinking when done */
@@ -2285,4 +2285,121 @@ code {
   opacity: 0.35;
   cursor: not-allowed;
   pointer-events: none;
+}
+/* ── Page transition fade ── */
+@keyframes shell-page-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.shell-page {
+  animation: shell-page-fade-in 0.18s ease-out;
+}
+/* ── Phase: terminal prompt visibility ── */
+.console-input-row {
+  border-top: 2px solid #dc143c;
+  background: #0d0d0d;
+}
+.console-input-row .console-prompt {
+  color: #dc143c;
+  font-weight: 600;
+}
+.console-input {
+  font-size: 15px;
+}
+.console-input:focus {
+  outline: none;
+}
+.console-input-wrap:focus-within {
+  box-shadow: inset 0 -1px 0 rgba(220,20,60,0.4);
+}
+/* ── Custom scrollbars (WebKit: Chrome, Edge, Safari) ── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #3a3a3a #161616;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: #161616;
+}
+*::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+  border-radius: 4px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+*::-webkit-scrollbar-corner {
+  background: #161616;
+}
+/* ── Landing: author/contact section ── */
+.landing-author {
+  position: relative;
+  z-index: 1;
+  padding: 48px 32px;
+  background: #1A1A1A;
+  border-top: 1px solid #3c3c3c;
+}
+.landing-author-card {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.landing-author-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.landing-author-label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #555;
+}
+.landing-author-name {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #f0f0f0;
+}
+.landing-author-desc {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  color: #888;
+  margin-top: 4px;
+  max-width: 380px;
+  line-height: 1.5;
+}
+.landing-author-links {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.landing-author-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid #3c3c3c;
+  color: #f0f0f0;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+.landing-author-link:hover {
+  border-color: #DC143C;
+  color: #DC143C;
 }

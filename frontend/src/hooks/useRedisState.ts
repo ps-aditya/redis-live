@@ -92,8 +92,9 @@ export function useRedisState(): UseRedisStateReturn {
     try {
       const result = await executeCommand(
         parsed.command,
-        parsed.key,
-        "value" in parsed ? parsed.value : undefined
+        "key" in parsed ? parsed.key : undefined,
+        "value" in parsed ? parsed.value : undefined,
+        "field" in parsed ? parsed.field : undefined
       );
 
       // Build console history line
@@ -109,6 +110,13 @@ export function useRedisState(): UseRedisStateReturn {
           case "EXPIRE": historyLine += `  → ${result.applied ? `TTL set to ${result.seconds}s` : "key not found"}`; break;
           case "LPUSH":  historyLine += `  → list length: ${result.length}`; break;
           case "RPOP":   historyLine += `  → "${result.value ?? "(nil)"}" popped`; break;
+          case "FLUSHALL": historyLine += `  → all keys flushed`; break;
+          case "LPOP":   historyLine += `  → "${result.value ?? "(nil)"}" popped`; break;
+          case "LLEN":   historyLine += `  → list length: ${result.len}`; break;
+          case "HSET":   historyLine += `  → field ${result.added === 1 ? "added" : "updated"}`; break;
+          case "HGET":   historyLine += `  → "${result.value ?? "(nil)"}"`; break;
+          case "SADD":   historyLine += `  → ${result.added === 1 ? "added (new)" : "already a member"}`; break;
+          case "SREM":   historyLine += `  → ${result.removed === 1 ? "removed" : "not a member"}`; break;
         }
       }
 

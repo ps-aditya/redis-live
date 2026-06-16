@@ -154,7 +154,7 @@ export function Shell() {
           <SideNavBar activePage={activePage} onNavigate={navigate} />
         )}
 
-        <div className="shell-page">
+        <div className="shell-page" key={activePage}>
           {activePage === 'landing'    && <LandingPage onNavigate={navigate} />}
           {activePage === 'lab'        && <LabWorkspace redisState={redisState} sandbox={sandbox} />}
           {activePage === 'visualizer' && <VisualizerPage redisState={redisState} />}

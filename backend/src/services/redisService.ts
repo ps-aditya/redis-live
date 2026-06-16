@@ -31,7 +31,6 @@ export async function executeExists(key: string): Promise<number> {
 
 export async function executeExpire(key: string, seconds: number): Promise<boolean> {
   const result = await redisClient.expire(key, seconds);
-  // redis v4+ returns boolean, older returns 0/1 — handle both
   return typeof result === "boolean" ? result : (result as number) === 1;
 }
 
@@ -41,6 +40,43 @@ export async function executeLPush(key: string, value: string): Promise<number> 
 
 export async function executeRPop(key: string): Promise<string | null> {
   return await redisClient.rPop(key);
+}
+
+// ── New: FLUSHALL ────────────────────────────────────────────────────────────
+
+export async function executeFlushAll(): Promise<void> {
+  await redisClient.flushAll();
+}
+
+// ── New: List commands ───────────────────────────────────────────────────────
+
+export async function executeLPop(key: string): Promise<string | null> {
+  return await redisClient.lPop(key);
+}
+
+export async function executeLLen(key: string): Promise<number> {
+  return await redisClient.lLen(key);
+}
+
+// ── New: Hash commands ───────────────────────────────────────────────────────
+
+export async function executeHSet(key: string, field: string, value: string): Promise<number> {
+  return await redisClient.hSet(key, field, value);
+}
+
+export async function executeHGet(key: string, field: string): Promise<string | null> {
+  const result = await redisClient.hGet(key, field);
+  return result ?? null;
+}
+
+// ── New: Set commands ─────────────────────────────────────────────────────────
+
+export async function executeSAdd(key: string, value: string): Promise<number> {
+  return await redisClient.sAdd(key, value);
+}
+
+export async function executeSRem(key: string, value: string): Promise<number> {
+  return await redisClient.sRem(key, value);
 }
 
 // ── Full state snapshot ───────────────────────────────────────────────────────
@@ -54,7 +90,6 @@ export async function getFullState(): Promise<Record<string, RedisEntry>> {
   for (const key of keys) {
     const type = await redisClient.type(key);
     const ttl  = await redisClient.ttl(key);
-    // ttl: -1 = no expiry (persistent), -2 = key doesn't exist
 
     if (type === "string") {
       const value = await redisClient.get(key);

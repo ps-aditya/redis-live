@@ -9,6 +9,13 @@ import {
   executeExpire,
   executeLPush,
   executeRPop,
+  executeFlushAll,
+  executeLPop,
+  executeLLen,
+  executeHSet,
+  executeHGet,
+  executeSAdd,
+  executeSRem,
   getFullState,
 } from "../services/redisService";
 
@@ -16,18 +23,31 @@ const router = Router();
 
 // POST /execute
 router.post("/execute", async (req: Request, res: Response) => {
-  const { command, key, value } = req.body;
+  const { command, key, value, field } = req.body;
 
-  if (!command || !key) {
+  if (!command) {
     return res.status(400).json({
       success: false,
-      error: "Missing required fields: command, key",
+      error: "Missing required field: command",
     });
   }
 
   const cmd = command.toUpperCase();
 
+  // FLUSHALL is the only command that doesn't need a key
+  if (!key && cmd !== "FLUSHALL") {
+    return res.status(400).json({
+      success: false,
+      error: "Missing required field: key",
+    });
+  }
+
   try {
+    if (cmd === "FLUSHALL") {
+      await executeFlushAll();
+      return res.json({ success: true, command: cmd, flushed: true });
+    }
+
     if (cmd === "SET") {
       if (value === undefined || value === null || value === "") {
         return res.status(400).json({ success: false, error: "SET requires a value" });
@@ -73,13 +93,57 @@ router.post("/execute", async (req: Request, res: Response) => {
       return res.json({ success: true, command: cmd, key, value: popped });
     }
 
+    if (cmd === "LPOP") {
+      const popped = await executeLPop(key);
+      return res.json({ success: true, command: cmd, key, value: popped });
+    }
+
+    if (cmd === "LLEN") {
+      const len = await executeLLen(key);
+      return res.json({ success: true, command: cmd, key, len });
+    }
+
+    if (cmd === "HSET") {
+      if (!field) {
+        return res.status(400).json({ success: false, error: "HSET requires a field name" });
+      }
+      if (value === undefined || value === null || value === "") {
+        return res.status(400).json({ success: false, error: "HSET requires a value" });
+      }
+      const added = await executeHSet(key, field, value);
+      return res.json({ success: true, command: cmd, key, field, value, added });
+    }
+
+    if (cmd === "HGET") {
+      if (!field) {
+        return res.status(400).json({ success: false, error: "HGET requires a field name" });
+      }
+      const result = await executeHGet(key, field);
+      return res.json({ success: true, command: cmd, key, field, value: result });
+    }
+
+    if (cmd === "SADD") {
+      if (value === undefined || value === null || value === "") {
+        return res.status(400).json({ success: false, error: "SADD requires a value" });
+      }
+      const added = await executeSAdd(key, value);
+      return res.json({ success: true, command: cmd, key, value, added });
+    }
+
+    if (cmd === "SREM") {
+      if (value === undefined || value === null || value === "") {
+        return res.status(400).json({ success: false, error: "SREM requires a value" });
+      }
+      const removed = await executeSRem(key, value);
+      return res.json({ success: true, command: cmd, key, value, removed });
+    }
+
     return res.status(400).json({
       success: false,
-      error: `Unsupported command: ${cmd}. Supported: SET, GET, DEL, EXISTS, EXPIRE, LPUSH, RPOP`,
+      error: `Unsupported command: ${cmd}. Supported: SET, GET, DEL, EXISTS, EXPIRE, LPUSH, RPOP, LPOP, LLEN, HSET, HGET, SADD, SREM, FLUSHALL`,
     });
 
   } catch (error) {
-    // Redis throws a typed error for WRONGTYPE operations
     const msg = String(error);
     if (msg.includes("WRONGTYPE")) {
       return res.status(400).json({

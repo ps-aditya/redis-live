@@ -66,19 +66,7 @@ export function LabWorkspace({ redisState, sandbox }: LabWorkspaceProps) {
           Experiments
           <span className="lab-subnav-badge">{EXPERIMENTS.length}</span>
         </button>
-        <div className="lab-subnav-right">
-          {isReplaying ? (
-            <button className="lab-btn-danger" onClick={stopReplay}>⏹ Stop Replay</button>
-          ) : (
-            <button
-              className="lab-btn-replay"
-              onClick={startReplay}
-              disabled={timeline.length === 0}
-            >
-              ▶ Replay
-            </button>
-          )}
-        </div>
+        
       </div>
 
       {/* ── Replay banner ── */}
