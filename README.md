@@ -30,6 +30,8 @@
 
 Redis State Explorer is an **interactive laboratory** for learning, debugging, and understanding Redis.
 
+It's free, open source and will remain so. The goal is to be the most intuitive way to learn Redis and not a product to monetize.
+
 Most Redis learning happens through documentation and static examples. RSE takes a different approach: **you run commands, watch state change in real time, and build intuition through observation** rather than memorization.
 
 It was built to answer the questions that documentation doesn't address well:
