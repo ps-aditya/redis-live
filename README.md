@@ -1,6 +1,7 @@
 # Redis State Explorer
 
-> **Observe Redis. Break Redis. Understand Redis.**
+> **Type a Redis command. Watch exactly what changes and why.**
+>
 
 <p align="center">
   <img width="200" height="200" alt="RSE Logo" src="https://github.com/user-attachments/assets/01827e14-3718-4b37-b37e-47bb1db97f39" />
