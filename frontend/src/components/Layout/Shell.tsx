@@ -8,7 +8,8 @@ import { LabWorkspace }   from '../../pages/LabWorkspace';
 import { VisualizerPage } from '../../pages/VisualizerPage';
 import { ExperimentPage } from '../../pages/ExperimentPage';
 import { useRedisState }  from '../../hooks/useRedisState';
-
+import { TerminalPage } from '../../pages/TerminalPage';
+import { SettingsPage } from '../../pages/SettingsPage';
 const TOP_NAV_PAGES  = ['landing', 'lab'];
 const SIDE_NAV_PAGES = ['visualizer', 'experiment', 'terminal', 'settings'];
 
@@ -80,6 +81,7 @@ export function Shell() {
   const [sandbox, setSandbox]             = useState('empty');
   const [searchQuery, setSearchQuery]     = useState('');
   const [sandboxLoading, setSandboxLoading] = useState(false);
+  const [sideNavCollapsed, setSideNavCollapsed] = useState(false);
 
   const redisState   = useRedisState();
   const { handleExecute } = redisState;
@@ -151,7 +153,12 @@ export function Shell() {
 
       <div className="shell-content">
         {useSideNav && (
-          <SideNavBar activePage={activePage} onNavigate={navigate} />
+          <SideNavBar
+            activePage={activePage}
+            onNavigate={navigate}
+            collapsed={sideNavCollapsed}
+            onToggleCollapse={() => setSideNavCollapsed((v) => !v)}
+          />
         )}
 
         <div className="shell-page" key={activePage}>
@@ -159,11 +166,13 @@ export function Shell() {
           {activePage === 'lab'        && <LabWorkspace redisState={redisState} sandbox={sandbox} />}
           {activePage === 'visualizer' && <VisualizerPage redisState={redisState} />}
           {activePage === 'experiment' && <ExperimentPage onNavigate={navigate} redisState={redisState} />}
-          {(activePage === 'terminal' || activePage === 'settings') && (
-            <div className="shell-placeholder">
-              <span className="material-symbols-outlined">construction</span>
-              <p>{activePage} — coming soon</p>
-            </div>
+          {activePage === 'terminal' && <TerminalPage redisState={redisState} />}
+          {activePage === 'settings' && (
+            <SettingsPage
+              sandbox={sandbox}
+              onSandboxChange={setSandbox}
+              onFlushAll={handleFlushAll}
+            />
           )}
         </div>
       </div>

@@ -12,7 +12,14 @@ interface CommandConsoleProps {
 
 export function CommandConsole({ onExecute, history, isLoading }: CommandConsoleProps) {
   const [input, setInput] = useState("");
+
+  // ── Command-only history (just what was sent, not response text) ────────────
+  const [commandHistory, setCommandHistory] = useState<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState<number | null>(null); // null = not browsing
+  const draftRef = useRef(""); // preserves in-progress input while arrowing through history
+
   const outputRef = useRef<HTMLDivElement>(null);
+  const inputRef  = useRef<HTMLInputElement>(null);
 
   // Auto-scroll to bottom whenever history grows
   useEffect(() => {
@@ -20,19 +27,76 @@ export function CommandConsole({ onExecute, history, isLoading }: CommandConsole
     if (el) el.scrollTop = el.scrollHeight;
   }, [history]);
 
+  // ── Refocus on browser tab/window regaining focus ───────────────────────────
+  useEffect(() => {
+    function handleWindowFocus() {
+      inputRef.current?.focus();
+    }
+    window.addEventListener("focus", handleWindowFocus);
+    return () => window.removeEventListener("focus", handleWindowFocus);
+  }, []);
+
   function handleSubmit() {
     const trimmed = input.trim();
     if (!trimmed) return;
     onExecute(trimmed);
+    setCommandHistory((prev) => [...prev, trimmed]);
+    setHistoryIndex(null);
+    draftRef.current = "";
     setInput("");
   }
 
   function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") handleSubmit();
+    if (e.key === "Enter") {
+      handleSubmit();
+      return;
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (commandHistory.length === 0) return;
+
+      if (historyIndex === null) {
+        // Entering history browsing — save current draft
+        draftRef.current = input;
+        const newIndex = commandHistory.length - 1;
+        setHistoryIndex(newIndex);
+        setInput(commandHistory[newIndex]);
+      } else if (historyIndex > 0) {
+        const newIndex = historyIndex - 1;
+        setHistoryIndex(newIndex);
+        setInput(commandHistory[newIndex]);
+      }
+      return;
+    }
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (historyIndex === null) return; // not browsing, nothing to do
+
+      if (historyIndex < commandHistory.length - 1) {
+        const newIndex = historyIndex + 1;
+        setHistoryIndex(newIndex);
+        setInput(commandHistory[newIndex]);
+      } else {
+        // Past the most recent — restore the in-progress draft
+        setHistoryIndex(null);
+        setInput(draftRef.current);
+      }
+      return;
+    }
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setInput(e.target.value);
+    // Manual typing exits history-browsing mode
+    if (historyIndex !== null) {
+      setHistoryIndex(null);
+    }
   }
 
   return (
-    <div className="console-panel">
+    <div className="console-panel" onClick={() => inputRef.current?.focus()}>
       <div className="console-output" ref={outputRef}>
         {history.length === 0 && (
           <p className="console-empty">No commands yet. Try: SET user John</p>
@@ -51,17 +115,16 @@ export function CommandConsole({ onExecute, history, isLoading }: CommandConsole
         <span className="console-prompt">rse:6379&gt;</span>
 
         <div className="console-input-wrap">
-          {/* Highlighted overlay — purely visual, sits behind the real input */}
           <div className="console-input-overlay" aria-hidden="true">
             <HighlightedCommand text={input} />
             <span className="console-cursor" />
           </div>
 
-          {/* Real input — transparent text, handles all interaction */}
           <input
+            ref={inputRef}
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleChange}
             onKeyDown={handleKeyDown}
             placeholder={input ? "" : "SET user John"}
             disabled={isLoading}

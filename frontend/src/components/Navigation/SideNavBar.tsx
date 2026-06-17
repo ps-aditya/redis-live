@@ -1,70 +1,85 @@
 // frontend/src/components/Navigation/SideNavBar.tsx
 
 const NAV_ITEMS = [
-  { id: 'lab',        icon: 'database',     label: 'Explorer'   },
-  { id: 'visualizer', icon: 'account_tree', label: 'Visualizer' },
-  { id: 'terminal',   icon: 'terminal',     label: 'Terminal'   },
-  { id: 'settings',   icon: 'settings',     label: 'Settings'   },
+  { id: 'experiment', icon: 'science',      label: 'Experiments' },
+  { id: 'visualizer', icon: 'account_tree', label: 'Visualizer'  },
+  { id: 'terminal',   icon: 'terminal',     label: 'Terminal'    },
+  { id: 'settings',   icon: 'settings',     label: 'Settings'    },
 ];
 
 interface SideNavBarProps {
   activePage: string;
   onNavigate: (page: string) => void;
+  collapsed: boolean;
+  onToggleCollapse: () => void;
 }
 
-export function SideNavBar({ activePage, onNavigate }: SideNavBarProps) {
+export function SideNavBar({ activePage, onNavigate, collapsed, onToggleCollapse }: SideNavBarProps) {
   return (
-    <nav className="side-nav">
-      {/* Brand block */}
-      <div className="side-nav-brand">
-        <div className="side-nav-title">RSE Explorer</div>
-        <div className="side-nav-version">v1.0.4-stable</div>
-      </div>
+    <>
+      <nav className={`side-nav ${collapsed ? 'side-nav--collapsed' : ''}`}>
+        {/* Brand block */}
+        <div className="side-nav-brand">
+          <div className="side-nav-title">RSE Explorer</div>
+          <div className="side-nav-version">v1.0.4-stable</div>
+        </div>
 
-      {/* New Connection */}
-      <div className="side-nav-connect">
-        <button className="side-nav-connect-btn">
-          <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>add</span>
-          New Connection
-        </button>
-      </div>
+        {/* Back to Lab — explicit, separate from the side-nav item group */}
+        <div className="side-nav-connect">
+          <button className="side-nav-connect-btn" onClick={() => onNavigate('lab')}>
+            <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>arrow_back</span>
+            Back to Lab
+          </button>
+        </div>
 
-      {/* Nav items */}
-      <div className="side-nav-items">
-        {NAV_ITEMS.map((item) => {
-          const isActive = activePage === item.id;
-          return (
-            <button
-              key={item.id}
-              onClick={() => onNavigate(item.id)}
-              className={`side-nav-item ${isActive ? 'side-nav-item--active' : ''}`}
-            >
-              <span
-                className="material-symbols-outlined"
-                style={{
-                  fontSize: '20px',
-                  fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0",
-                }}
+        {/* Nav items */}
+        <div className="side-nav-items">
+          {NAV_ITEMS.map((item) => {
+            const isActive = activePage === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => onNavigate(item.id)}
+                className={`side-nav-item ${isActive ? 'side-nav-item--active' : ''}`}
               >
-                {item.icon}
-              </span>
-              <span>{item.label}</span>
-            </button>
-          );
-        })}
-      </div>
+                <span
+                  className="material-symbols-outlined"
+                  style={{
+                    fontSize: '20px',
+                    fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0",
+                  }}
+                >
+                  {item.icon}
+                </span>
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+        </div>
 
-      {/* Footer */}
-      <div className="side-nav-footer">
-        <button className="side-nav-footer-item">
-          <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>help</span>
-          <span>Support</span>
-        </button>
-        <button className="side-nav-footer-item">
-          <span className="material-symbols-outlined" style={{ fontSize: '22px' }}>account_circle</span>
-          <span>User profile</span>
-        </button>
-      </div>
-    </nav>
+        {/* Footer */}
+        <div className="side-nav-footer">
+          <button className="side-nav-footer-item">
+            <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>help</span>
+            <span>Support</span>
+          </button>
+          <button className="side-nav-footer-item">
+            <span className="material-symbols-outlined" style={{ fontSize: '22px' }}>account_circle</span>
+            <span>User profile</span>
+          </button>
+        </div>
+      </nav>
+
+      {/* Collapse/expand toggle — always visible, sits at the sidebar's edge */}
+      <button
+        className={`side-nav-toggle ${collapsed ? 'side-nav-toggle--collapsed' : ''}`}
+        onClick={onToggleCollapse}
+        title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+      >
+        <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>
+          {collapsed ? 'chevron_right' : 'chevron_left'}
+        </span>
+      </button>
+    </>
   );
 }
