@@ -61,7 +61,7 @@ export function SideNavBar({ activePage, onNavigate, collapsed, onToggleCollapse
         <div className="side-nav-footer">
           <a
             className="side-nav-footer-item"
-            href="__REPO_URL__/issues"
+            href="https://github.com/ps-aditya/Redis-State-Explorer/issues"
             target="_blank"
             rel="noopener noreferrer"
           >
