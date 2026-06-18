@@ -64,27 +64,27 @@ RSE makes these questions answerable by making Redis visible.
     </td>
     <td align="center">
       <img src="docs/assets/screenshot-lab.png" alt="Lab Workspace" width="400"/>
-      <br /><sub>Lab Workspace — E-Commerce Sandbox</sub>
+      <br /><sub>Lab Workspace - E-Commerce Sandbox</sub>
     </td>
   </tr>
   <tr>
     <td align="center">
       <img src="docs/assets/screenshot-inspector.png" alt="Key Inspector" width="400"/>
-      <br /><sub>Key Inspector — HASH accordion view</sub>
+      <br /><sub>Key Inspector - HASH accordion view</sub>
     </td>
     <td align="center">
       <img src="docs/assets/screenshot-visualizer.png" alt="Structure Visualizer" width="400"/>
-      <br /><sub>Structure Visualizer — Execution Trace</sub>
+      <br /><sub>Structure Visualizer - Execution Trace</sub>
     </td>
   </tr>
   <tr>
     <td align="center">
       <img src="docs/assets/screenshot-experiments.png" alt="Experiment Library" width="400"/>
-      <br /><sub>Experiment Library — 10 guided modules</sub>
+      <br /><sub>Experiment Library - 10 guided modules</sub>
     </td>
     <td align="center">
       <img src="docs/assets/screenshot-experiment-runner.png" alt="Experiment Runner" width="400"/>
-      <br /><sub>Experiment Runner — Queue Manipulation</sub>
+      <br /><sub>Experiment Runner - Queue Manipulation</sub>
     </td>
   </tr>
 </table>
@@ -94,17 +94,17 @@ RSE makes these questions answerable by making Redis visible.
 ## Features
 
 ### Lab Workspace
-- **Live command terminal** with syntax highlighting — keywords, key names, and values are color-coded as you type
-- **Real-time keyspace** — state updates within 2 seconds of every command, with smooth per-second TTL countdowns
-- **Type-aware cards** — STRING, LIST, HASH, SET each rendered as their actual structure (list nodes with HEAD/TAIL labels, hash field tables, set pills)
-- **Mutation flash** — new keys pulse green, modified keys pulse yellow, deleted keys dissolve
-- **Key Inspector** — click any card to expand TTL, encoding, size estimate, raw value, and a Delete action
-- **Command timeline** — full history of commands with before/after snapshots and one-click replay
+- **Live command terminal** with syntax highlighting - keywords, key names, and values are color-coded as you type
+- **Real-time keyspace** - state updates within 2 seconds of every command, with smooth per-second TTL countdowns
+- **Type-aware cards** - STRING, LIST, HASH, SET each rendered as their actual structure (list nodes with HEAD/TAIL labels, hash field tables, set pills)
+- **Mutation flash** - new keys pulse green, modified keys pulse yellow, deleted keys dissolve
+- **Key Inspector** - click any card to expand TTL, encoding, size estimate, raw value, and a Delete action
+- **Command timeline** - full history of commands with before/after snapshots and one-click replay
 
 ### Structure Visualizer
-- **Live execution trace** — four-stage pipeline (INPUT → INTERPRET → DELTA → VISUALIZE) pulses in real time as commands run
-- **WRONGTYPE banner** — when a type mismatch occurs, a dismissible error banner explains exactly what went wrong and why it matters in production
-- **Structure blocks** — STRING, LIST, HASH, SET rendered as diagram nodes with connection arrows, HEAD/TAIL markers, and field tables
+- **Live execution trace** - four-stage pipeline (INPUT → INTERPRET → DELTA → VISUALIZE) pulses in real time as commands run
+- **WRONGTYPE banner** - when a type mismatch occurs, a dismissible error banner explains exactly what went wrong and why it matters in production
+- **Structure blocks** - STRING, LIST, HASH, SET rendered as diagram nodes with connection arrows, HEAD/TAIL markers, and field tables
 
 ### Experiment Library
 **10 guided experiments** that teach Redis through discovery, not instruction:
@@ -119,7 +119,7 @@ RSE makes these questions answerable by making Redis visible.
 | 06 | How can Redis store objects? | Hashes, HSET, HGET |
 | 07 | What happens with a WRONGTYPE error? | Type Safety, Errors |
 | 08 | Why is Redis used for caching? | Caching, TTL, Patterns |
-| 09 | DEL vs overwrite — what is the difference? | DEL, SET, Keyspace |
+| 09 | DEL vs overwrite - what is the difference? | DEL, SET, Keyspace |
 | 10 | What does Redis return for missing keys? | GET, EXISTS, nil |
 
 Each experiment follows a structured flow: **Question → Hypothesis → Experiment → Observation → Reflection**. A live structure visualizer updates as you type commands, and verification steps track your progress through the module.
@@ -127,9 +127,9 @@ Each experiment follows a structured flow: **Question → Hypothesis → Experim
 ### Sandbox Scenarios
 Switch between pre-seeded database scenarios from the top navigation:
 
-- **Default / Empty** — clean slate for manual exploration
-- **Populated: E-Commerce** — realistic keyspace with session tokens, product hashes, shopping carts, an order queue, active users set, and rate-limit counters with live TTLs
-- **Chaos / Heavy Load** — 50+ keys across `tmp:`, `metric:`, and `session:` namespaces with volatile TTLs (5–60s), simulating a production system under pressure
+- **Default / Empty** - clean slate for manual exploration
+- **Populated: E-Commerce** - realistic keyspace with session tokens, product hashes, shopping carts, an order queue, active users set, and rate-limit counters with live TTLs
+- **Chaos / Heavy Load** - 50+ keys across `tmp:`, `metric:`, and `session:` namespaces with volatile TTLs (5–60s), simulating a production system under pressure
 
 ---
 
@@ -172,7 +172,7 @@ npm install
 
 You need two terminals.
 
-**Terminal 1 — Backend:**
+**Terminal 1 - Backend:**
 ```bash
 cd backend
 npm run dev
@@ -180,7 +180,7 @@ npm run dev
 # Expected: "Connected to Redis" + "RSE backend running on http://localhost:3000"
 ```
 
-**Terminal 2 — Frontend:**
+**Terminal 2 - Frontend:**
 ```bash
 cd frontend
 npm run dev
@@ -206,7 +206,7 @@ See [`ARCHITECTURE.md`](ARCHITECTURE.md) for a detailed breakdown of the compone
 ```
 Browser
   └── React App (Vite, TypeScript, plain CSS)
-        ├── Shell (tab-state router — no React Router)
+        ├── Shell (tab-state router - no React Router)
         ├── TopNavBar / SideNavBar
         ├── LandingPage
         ├── LabWorkspace
@@ -218,8 +218,8 @@ Browser
         └── ExperimentPage (library picker + guided runner)
 
 Express API (Node.js, TypeScript)
-  └── POST /execute   — runs a Redis command, returns result
-  └── GET  /state     — returns full keyspace as typed RedisEntry objects
+  └── POST /execute   - runs a Redis command, returns result
+  └── GET  /state     - returns full keyspace as typed RedisEntry objects
 
 Redis (local or managed)
 ```
