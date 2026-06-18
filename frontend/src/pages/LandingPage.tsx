@@ -88,7 +88,7 @@ export function LandingPage({ onNavigate }: LandingPageProps) {
             className="landing-btn-primary"
             onClick={() => onNavigate('experiment')}
           >
-            Start Learning
+            Start Exploring
           </button>
           <button
             className="landing-btn-secondary"

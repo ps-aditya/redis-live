@@ -163,7 +163,7 @@ export function Shell() {
 
         <div className="shell-page" key={activePage}>
           {activePage === 'landing'    && <LandingPage onNavigate={navigate} />}
-          {activePage === 'lab'        && <LabWorkspace redisState={redisState} sandbox={sandbox} />}
+          {activePage === 'lab'        && <LabWorkspace redisState={redisState} sandbox={sandbox} onNavigate={navigate} />}
           {activePage === 'visualizer' && <VisualizerPage redisState={redisState} />}
           {activePage === 'experiment' && <ExperimentPage onNavigate={navigate} redisState={redisState} />}
           {activePage === 'terminal' && <TerminalPage redisState={redisState} />}

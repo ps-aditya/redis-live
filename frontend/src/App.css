@@ -2661,3 +2661,24 @@ code {
 .settings-btn--danger:hover {
   background: rgba(255,59,59,0.1);
 }
+/* ── Lab sub-nav: "Open Experiments" link (replaces old dual-tab toggle) ── */
+.lab-subnav-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid #3c3c3c;
+  color: #888;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.lab-subnav-link:hover {
+  border-color: #DC143C;
+  color: #DC143C;
+}

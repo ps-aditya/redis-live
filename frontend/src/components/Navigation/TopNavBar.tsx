@@ -31,8 +31,8 @@ export function TopNavBar({
           RSE
         </button>
         <div className="top-nav-links">
-          <a className="top-nav-link" href="#">Documentation</a>
-          <a className="top-nav-link" href="#">GitHub</a>
+          <a className="top-nav-link" href="https://github.com/ps-aditya/Redis-State-Explorer/blob/main/README.md#readme" target="_blank" rel="noopener noreferrer">Documentation</a>
+          <a className="top-nav-link" href="https://github.com/ps-aditya/Redis-State-Explorer" target="_blank" rel="noopener noreferrer">GitHub</a>
         </div>
       </div>
 

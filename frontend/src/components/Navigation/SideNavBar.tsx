@@ -59,14 +59,15 @@ export function SideNavBar({ activePage, onNavigate, collapsed, onToggleCollapse
 
         {/* Footer */}
         <div className="side-nav-footer">
-          <button className="side-nav-footer-item">
+          <a
+            className="side-nav-footer-item"
+            href="__REPO_URL__/issues"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>help</span>
             <span>Support</span>
-          </button>
-          <button className="side-nav-footer-item">
-            <span className="material-symbols-outlined" style={{ fontSize: '22px' }}>account_circle</span>
-            <span>User profile</span>
-          </button>
+          </a>
         </div>
       </nav>
 
