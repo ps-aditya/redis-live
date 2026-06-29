@@ -1,0 +1,26 @@
+{
+  "name": "redis-state-explorer",
+  "displayName": "Redis State Explorer",
+  "description": "A VS Code extension for exploring Redis state",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "main": "./out/extension.js",
+  "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "id": "redis-state-explorer.terminal",
+          "name": "Terminal",
+          "when": "redis-state-explorer:enabled"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "compile": "tsc -p ./"
+  }
+}

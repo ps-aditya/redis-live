@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <style>
+      .redis-red { fill: #EC4C63; }
+      .redis-shape { stroke: #EC4C63; stroke-width: 2; fill: none; }
+    </style>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="64" cy="64" r="60" fill="#1e1e1e" stroke="#EC4C63" stroke-width="1" opacity="0.3"/>
+  
+  <!-- Stylized database cylinder (Redis inspired) -->
+  <ellipse cx="64" cy="40" rx="24" ry="12" class="redis-shape"/>
+  <line x1="40" y1="40" x2="40" y2="85" stroke="#EC4C63" stroke-width="2"/>
+  <line x1="88" y1="40" x2="88" y2="85" stroke="#EC4C63" stroke-width="2"/>
+  <ellipse cx="64" cy="85" rx="24" ry="12" class="redis-shape"/>
+  
+  <!-- Accent dot for "live" indication -->
+  <circle cx="105" cy="25" r="6" fill="#00D26A"/>
+  <circle cx="105" cy="25" r="10" fill="none" stroke="#00D26A" stroke-width="1" opacity="0.5">
+    <animate attributeName="r" values="10;15" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.5;0" dur="2s" repeatCount="indefinite"/>
+  </circle>
+</svg>

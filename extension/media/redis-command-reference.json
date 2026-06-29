@@ -1,0 +1,111 @@
+{
+  "categories": {
+    "Strings": [
+      { "name": "SET", "signature": "SET key value [EX seconds] [PX ms] [NX|XX]", "description": "Set key to string value" },
+      { "name": "GET", "signature": "GET key", "description": "Get the value of a key" },
+      { "name": "MSET", "signature": "MSET key value [key value ...]", "description": "Set multiple keys to multiple values" },
+      { "name": "MGET", "signature": "MGET key [key ...]", "description": "Get the values of all given keys" },
+      { "name": "INCR", "signature": "INCR key", "description": "Increment the integer value of a key by one" },
+      { "name": "INCRBY", "signature": "INCRBY key increment", "description": "Increment the integer value of a key by the given amount" },
+      { "name": "DECR", "signature": "DECR key", "description": "Decrement the integer value of a key by one" },
+      { "name": "APPEND", "signature": "APPEND key value", "description": "Append a value to a key" },
+      { "name": "STRLEN", "signature": "STRLEN key", "description": "Get the length of the value stored in a key" },
+      { "name": "GETSET", "signature": "GETSET key value", "description": "Set the string value of a key and return its old value" },
+      { "name": "SETNX", "signature": "SETNX key value", "description": "Set the value of a key, only if the key does not exist" },
+      { "name": "SETEX", "signature": "SETEX key seconds value", "description": "Set the value and expiration of a key" },
+      { "name": "GETEX", "signature": "GETEX key [EX|PX|EXAT|PXAT|PERSIST]", "description": "Get the value of a key and optionally set its expiration" },
+      { "name": "GETDEL", "signature": "GETDEL key", "description": "Get the value of a key and delete the key" }
+    ],
+    "Lists": [
+      { "name": "LPUSH", "signature": "LPUSH key element [element ...]", "description": "Prepend one or multiple elements to a list" },
+      { "name": "RPUSH", "signature": "RPUSH key element [element ...]", "description": "Append one or multiple elements to a list" },
+      { "name": "LPOP", "signature": "LPOP key [count]", "description": "Remove and get the first elements in a list" },
+      { "name": "RPOP", "signature": "RPOP key [count]", "description": "Remove and get the last elements in a list" },
+      { "name": "LLEN", "signature": "LLEN key", "description": "Get the length of a list" },
+      { "name": "LRANGE", "signature": "LRANGE key start stop", "description": "Get a range of elements from a list" },
+      { "name": "LINDEX", "signature": "LINDEX key index", "description": "Get an element from a list by its index" },
+      { "name": "LSET", "signature": "LSET key index element", "description": "Set the value of an element in a list by its index" },
+      { "name": "LREM", "signature": "LREM key count element", "description": "Remove elements from a list" },
+      { "name": "LTRIM", "signature": "LTRIM key start stop", "description": "Trim a list to the specified range" },
+      { "name": "LINSERT", "signature": "LINSERT key BEFORE|AFTER pivot element", "description": "Insert an element before or after another element in a list" },
+      { "name": "LMOVE", "signature": "LMOVE source destination LEFT|RIGHT LEFT|RIGHT", "description": "Pop an element from one list, push and return it to another list" }
+    ],
+    "Hashes": [
+      { "name": "HSET", "signature": "HSET key field value [field value ...]", "description": "Set the string value of a hash field" },
+      { "name": "HGET", "signature": "HGET key field", "description": "Get the value of a hash field" },
+      { "name": "HMSET", "signature": "HMSET key field value [field value ...]", "description": "Set multiple hash fields to multiple values" },
+      { "name": "HMGET", "signature": "HMGET key field [field ...]", "description": "Get the values of all the given hash fields" },
+      { "name": "HDEL", "signature": "HDEL key field [field ...]", "description": "Delete one or more hash fields" },
+      { "name": "HEXISTS", "signature": "HEXISTS key field", "description": "Determine if a hash field exists" },
+      { "name": "HLEN", "signature": "HLEN key", "description": "Get the number of fields in a hash" },
+      { "name": "HKEYS", "signature": "HKEYS key", "description": "Get all the fields in a hash" },
+      { "name": "HVALS", "signature": "HVALS key", "description": "Get all the values in a hash" },
+      { "name": "HGETALL", "signature": "HGETALL key", "description": "Get all the fields and values in a hash" },
+      { "name": "HINCRBY", "signature": "HINCRBY key field increment", "description": "Increment the integer value of a hash field by the given number" }
+    ],
+    "Sets": [
+      { "name": "SADD", "signature": "SADD key member [member ...]", "description": "Add one or more members to a set" },
+      { "name": "SREM", "signature": "SREM key member [member ...]", "description": "Remove one or more members from a set" },
+      { "name": "SMEMBERS", "signature": "SMEMBERS key", "description": "Get all the members in a set" },
+      { "name": "SISMEMBER", "signature": "SISMEMBER key member", "description": "Determine if a given value is a member of a set" },
+      { "name": "SCARD", "signature": "SCARD key", "description": "Get the number of members in a set" },
+      { "name": "SUNION", "signature": "SUNION key [key ...]", "description": "Add multiple sets" },
+      { "name": "SINTER", "signature": "SINTER key [key ...]", "description": "Intersect multiple sets" },
+      { "name": "SDIFF", "signature": "SDIFF key [key ...]", "description": "Subtract multiple sets" },
+      { "name": "SPOP", "signature": "SPOP key [count]", "description": "Remove and return one or multiple random members from a set" },
+      { "name": "SRANDMEMBER", "signature": "SRANDMEMBER key [count]", "description": "Get one or multiple random members from a set" }
+    ],
+    "Sorted Sets": [
+      { "name": "ZADD", "signature": "ZADD key [NX|XX] [GT|LT] score member [score member ...]", "description": "Add one or more members to a sorted set, or update its score if it already exists" },
+      { "name": "ZREM", "signature": "ZREM key member [member ...]", "description": "Remove one or more members from a sorted set" },
+      { "name": "ZSCORE", "signature": "ZSCORE key member", "description": "Get the score associated with the given member in a sorted set" },
+      { "name": "ZRANK", "signature": "ZRANK key member", "description": "Determine the index of a member in a sorted set" },
+      { "name": "ZRANGE", "signature": "ZRANGE key min max [BYSCORE|BYLEX] [REV] [LIMIT offset count]", "description": "Return a range of members in a sorted set" },
+      { "name": "ZCARD", "signature": "ZCARD key", "description": "Get the number of members in a sorted set" },
+      { "name": "ZCOUNT", "signature": "ZCOUNT key min max", "description": "Count the members in a sorted set with scores within the given values" },
+      { "name": "ZINCRBY", "signature": "ZINCRBY key increment member", "description": "Increment the score of a member in a sorted set" },
+      { "name": "ZPOPMIN", "signature": "ZPOPMIN key [count]", "description": "Remove and return members with the lowest scores in a sorted set" },
+      { "name": "ZPOPMAX", "signature": "ZPOPMAX key [count]", "description": "Remove and return members with the highest scores in a sorted set" }
+    ],
+    "Keys": [
+      { "name": "DEL", "signature": "DEL key [key ...]", "description": "Delete one or more keys" },
+      { "name": "EXISTS", "signature": "EXISTS key [key ...]", "description": "Determine if one or more keys exist" },
+      { "name": "EXPIRE", "signature": "EXPIRE key seconds", "description": "Set a key's time to live in seconds" },
+      { "name": "TTL", "signature": "TTL key", "description": "Get the time to live for a key in seconds" },
+      { "name": "PERSIST", "signature": "PERSIST key", "description": "Remove the expiration from a key" },
+      { "name": "RENAME", "signature": "RENAME key newkey", "description": "Rename a key" },
+      { "name": "TYPE", "signature": "TYPE key", "description": "Determine the type stored at key" },
+      { "name": "KEYS", "signature": "KEYS pattern", "description": "Find all keys matching the given pattern" },
+      { "name": "SCAN", "signature": "SCAN cursor [MATCH pattern] [COUNT count] [TYPE type]", "description": "Incrementally iterate the keys space" },
+      { "name": "UNLINK", "signature": "UNLINK key [key ...]", "description": "Delete keys asynchronously in another thread" },
+      { "name": "COPY", "signature": "COPY source destination [DB destination-db] [REPLACE]", "description": "Copy a key" }
+    ],
+    "Server": [
+      { "name": "PING", "signature": "PING [message]", "description": "Ping the server" },
+      { "name": "INFO", "signature": "INFO [section]", "description": "Get information and statistics about the server" },
+      { "name": "DBSIZE", "signature": "DBSIZE", "description": "Return the number of keys in the selected database" },
+      { "name": "FLUSHDB", "signature": "FLUSHDB [ASYNC|SYNC]", "description": "Remove all keys from the current database" },
+      { "name": "FLUSHALL", "signature": "FLUSHALL [ASYNC|SYNC]", "description": "Remove all keys from all databases" },
+      { "name": "SELECT", "signature": "SELECT index", "description": "Change the selected database for the current connection" },
+      { "name": "SAVE", "signature": "SAVE", "description": "Synchronously save the dataset to disk" },
+      { "name": "BGSAVE", "signature": "BGSAVE [SCHEDULE]", "description": "Asynchronously save the dataset to disk" },
+      { "name": "CONFIG", "signature": "CONFIG GET|SET|REWRITE|RESETSTAT parameter [value]", "description": "Get, set, or reset Redis configuration parameters" },
+      { "name": "CLIENT", "signature": "CLIENT LIST|INFO|KILL|GETNAME|SETNAME|...", "description": "Manage client connections" },
+      { "name": "HELLO", "signature": "HELLO [protover [AUTH username password] [SETNAME clientname]]", "description": "Switch Redis protocol and optionally authenticate" },
+      { "name": "RESET", "signature": "RESET", "description": "Reset the connection state" },
+      { "name": "QUIT", "signature": "QUIT", "description": "Close the connection" }
+    ],
+    "Transactions": [
+      { "name": "MULTI", "signature": "MULTI", "description": "Mark the start of a transaction block" },
+      { "name": "EXEC", "signature": "EXEC", "description": "Execute all commands issued after MULTI" },
+      { "name": "DISCARD", "signature": "DISCARD", "description": "Discard all commands issued after MULTI" },
+      { "name": "WATCH", "signature": "WATCH key [key ...]", "description": "Watch the given keys to determine execution of the MULTI/EXEC block" },
+      { "name": "UNWATCH", "signature": "UNWATCH", "description": "Forget about all watched keys" }
+    ],
+    "Scripting": [
+      { "name": "EVAL", "signature": "EVAL script numkeys [key [key ...]] [arg [arg ...]]", "description": "Execute a Lua script server side" },
+      { "name": "EVALSHA", "signature": "EVALSHA sha1 numkeys [key [key ...]] [arg [arg ...]]", "description": "Execute a Lua script server side by its SHA1 digest" },
+      { "name": "SCRIPT", "signature": "SCRIPT EXISTS|FLUSH|LOAD script", "description": "Manage Lua scripts" }
+    ]
+  }
+}

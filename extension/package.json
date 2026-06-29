@@ -1,0 +1,107 @@
+{
+  "name": "redis-state-explorer",
+  "displayName": "Redis Live",
+  "description": "Live Redis in VS Code - see your Redis state in real time with terminal, key explorer, TLS, and all Redis data types.",
+  "version": "0.3.0",
+  "publisher": "Relay",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ps-aditya/redis-live"
+},
+  "categories": [
+    "Visualization",
+    "Other"
+  ],
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
+"keywords": ["redis", "redis client", "redis gui", "redis terminal", "redis live", "redis explorer", "redis viewer", "redis manager", "redis console", "database", "nosql", "cache", "key value", "real time", "live state", "diff", "stream", "tls", "ioredis"],
+  "main": "./out/extension.js",
+"contributes": {
+  "viewsContainers": {
+    "activitybar": [
+      {
+        "id": "redis-state-explorer",
+        "title": "Redis Live",
+        "icon": "media/icon-activity.svg"
+      }
+    ]
+  },
+  "views": {
+    "redis-state-explorer": [
+      {
+          "id": "redis-state-explorer.sidebar",
+          "name": "Redis Live",
+          "type": "webview",
+          "visibility": "visible"
+      }
+    ]
+  },
+  "viewsWelcome": [
+    {
+      "view": "redis-state-explorer.sidebar",
+      "contents": "No Redis connection yet.\n\n[Add Connection](command:redis-live.addConnection)\n\nSupports redis:// and rediss:// (TLS). Connections are stored securely in VS Code global state, not your workspace.",
+      "when": "!redis-live:connected"
+    }
+  ],
+  "commands": [
+    {
+      "command": "redis-state-explorer.openPanel",
+      "title": "Redis Live: Open Panel"
+    },
+    {
+      "command": "redis-state-explorer.configure",
+      "title": "Redis Live: Configure"
+    },
+    {
+      "command": "redis-live.connect",
+      "title": "Redis Live: Connect…"
+    },
+    {
+      "command": "redis-live.addConnection",
+      "title": "Redis Live: Add Connection…"
+    }
+  ],
+  "configuration": {
+    "title": "Redis Live",
+    "properties": {
+      "redis-state-explorer.redisUrl": {
+        "type": "string",
+        "default": "redis://localhost:6379",
+        "description": "Redis connection URL (redis://[:password@]host[:port][/db] or rediss:// for TLS)"
+      },
+      "redis-state-explorer.pollInterval": {
+        "type": "number",
+        "default": 1000,
+        "minimum": 100,
+        "maximum": 60000,
+        "description": "State refresh interval in milliseconds"
+      },
+      "redis-state-explorer.enabled": {
+        "type": "boolean",
+        "default": true,
+        "description": "Enable/disable the extension"
+      }
+    }
+  }
+},  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "ioredis": "^5.11.1"
+  }
+}
