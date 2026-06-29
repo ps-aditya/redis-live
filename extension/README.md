@@ -22,7 +22,7 @@ Redis Live is built for the workflow that actually matters: **you write code, yo
 All your Redis keys, updating automatically in real time. Keys flash green when added, yellow when modified. No manual refresh. No browser tab. Just your keys, right there.
 
 ### 🖥 Terminal with syntax highlighting
-Type any Redis command directly in the sidebar. All 200+ commands supported. Commands are color-coded as you type — keywords, keys, values, numbers, and flags each get their own color.
+Type any Redis command directly in the sidebar. All 200+ commands supported. Commands are color-coded as you type - keywords, keys, values, numbers, and flags each get their own color.
 
 ```
 ❯ SET session:abc "user:john" EX 3600
@@ -37,15 +37,15 @@ Type any Redis command directly in the sidebar. All 200+ commands supported. Com
 ### 📊 Diff timeline
 Every Redis state change is recorded. Commands you ran are labeled by name. Changes from other processes show as "external change." See exactly what changed, when, and how many keys were affected.
 
-### 💾 Save-diff — the feature nobody else has
+### 💾 Save-diff - the feature nobody else has
 Save a file → Redis Live captures your Redis state before and after → shows exactly which keys your code changed as a result. No other tool on earth connects your code saves to your Redis state changes. This is the feature that makes Redis Live irreplaceable once you've used it.
 
 ### 🔍 Code detective
 Open any file using a Redis client and Redis Live highlights the matching keys in your state panel. Click `⟨/⟩` to jump to the exact line in your code that references that key.
 
 Supports:
-- Node.js — `client.get()`, `redis.set()`, `ioredis`
-- Python — `r.get()`, `redis.set()`
+- Node.js - `client.get()`, `redis.set()`, `ioredis`
+- Python - `r.get()`, `redis.set()`
 
 ### 📖 Command reference
 Press `⌨` in the terminal to open a searchable reference of 200+ Redis commands organized by category. Click any command to insert it into the terminal input with your cursor at the first argument.
@@ -54,7 +54,7 @@ Press `⌨` in the terminal to open a searchable reference of 200+ Redis command
 Save named connection profiles (local, staging, prod). Switch between them from the sidebar. Supports `redis://` for local and `rediss://` for TLS-encrypted cloud instances.
 
 ### 🔎 Key filtering
-Type any pattern in the state panel to filter your keys instantly — `user:*`, `session:*`, `cache:*`. Client-side, zero latency.
+Type any pattern in the state panel to filter your keys instantly - `user:*`, `session:*`, `cache:*`. Client-side, zero latency.
 
 ---
 
@@ -140,7 +140,7 @@ rediss://default:token@my-instance.upstash.io:6380
 ## Perfect for
 
 - **Debugging** Redis-connected Node.js, Python, and Go applications
-- **Learning** Redis data structures — run a command, watch the state change instantly
+- **Learning** Redis data structures - run a command, watch the state change instantly
 - **Understanding** what your code actually does to Redis, without guessing
 - **Teams** who want to see Redis state during code review or pair programming
 - **Students** studying NoSQL databases who want a live feedback loop
@@ -150,7 +150,7 @@ rediss://default:token@my-instance.upstash.io:6380
 ## Requirements
 
 - VS Code 1.85.0 or later
-- A running Redis instance — local, Docker, or cloud
+- A running Redis instance - local, Docker, or cloud
 
 **No backend server required.** Redis Live connects directly to Redis using the battle-tested `ioredis` client, built into the extension. Nothing to install, nothing to run.
 
