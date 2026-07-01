@@ -1,336 +1,259 @@
-# Redis State Explorer
+# Redis Live
 
-> **Observe Redis. Break Redis. Understand Redis.**
+**See exactly what your code does to Redis, without leaving VS Code.**
 
-<p align="center">
-  <img width="200" height="200" alt="RSE Logo" src="https://github.com/user-attachments/assets/01827e14-3718-4b37-b37e-47bb1db97f39" />
-</p>
+Redis Live is a VS Code extension that connects directly to your Redis instance and shows you what's happening inside it in real time. Run a command, watch the key appear. Save a file, see which keys changed as a result. Every mutation tracked, every change visible, all inside the sidebar.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/license-MIT-DC143C?style=flat-square" alt="License" />
-  <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React" />
-  <img src="https://img.shields.io/badge/Node.js-Express-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node.js" />
-  <img src="https://img.shields.io/badge/Redis-7.x-FF4438?style=flat-square&logo=redis&logoColor=white" alt="Redis" />
-  <img src="https://img.shields.io/badge/status-active-00FF88?style=flat-square" alt="Status" />
-</p>
+Built in 2026. Actively maintained.
 
-<p align="center">
-  <a href="#demo">Demo</a> ·
-  <a href="#features">Features</a> ·
-  <a href="#getting-started">Getting Started</a> ·
-  <a href="#architecture">Architecture</a> ·
-  <a href="#roadmap">Roadmap</a> ·
-  <a href="#contributing">Contributing</a>
-</p>
-
----
-
-## What is RSE?
-
-Redis State Explorer is an **interactive laboratory** for learning, debugging, and understanding Redis.
-
-It's free, open source and will remain so. The goal is to be the most intuitive way to learn Redis and not a product to monetize.
-
-Most Redis learning happens through documentation and static examples. RSE takes a different approach: **you run commands, watch state change in real time, and build intuition through observation** rather than memorization.
-
-It was built to answer the questions that documentation doesn't address well:
-
-- Why did RPOP return `task1` instead of `task3`?
-- What exactly changes when EXPIRE fires?
-- Why does Redis reject LPUSH on a STRING key instead of overwriting it?
-- How does a cache-aside pattern actually behave under load?
-
-RSE makes these questions answerable by making Redis visible.
-
----
-
-## Demo
-
-<!-- Replace with your actual GIF once recorded -->
-![RSE Demo](docs/assets/demo.gif)
-
-**[Try it live →](https://your-deployment-url.com)** *(deployment coming soon)*
-
----
-
-## Screenshots
-
-<table>
-  <tr>
-    <td align="center">
-      <img src="docs/assets/screenshot-landing.png" alt="Landing Page" width="400"/>
-      <br /><sub>Landing Page</sub>
-    </td>
-    <td align="center">
-      <img src="docs/assets/screenshot-lab.png" alt="Lab Workspace" width="400"/>
-      <br /><sub>Lab Workspace - E-Commerce Sandbox</sub>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="docs/assets/screenshot-inspector.png" alt="Key Inspector" width="400"/>
-      <br /><sub>Key Inspector - HASH accordion view</sub>
-    </td>
-    <td align="center">
-      <img src="docs/assets/screenshot-visualizer.png" alt="Structure Visualizer" width="400"/>
-      <br /><sub>Structure Visualizer - Execution Trace</sub>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="docs/assets/screenshot-experiments.png" alt="Experiment Library" width="400"/>
-      <br /><sub>Experiment Library - 10 guided modules</sub>
-    </td>
-    <td align="center">
-      <img src="docs/assets/screenshot-experiment-runner.png" alt="Experiment Runner" width="400"/>
-      <br /><sub>Experiment Runner - Queue Manipulation</sub>
-    </td>
-  </tr>
-</table>
-
----
-
-## Features
-
-### Lab Workspace
-- **Live command terminal** with syntax highlighting - keywords, key names, and values are color-coded as you type
-- **Real-time keyspace** - state updates within 2 seconds of every command, with smooth per-second TTL countdowns
-- **Type-aware cards** - STRING, LIST, HASH, SET each rendered as their actual structure (list nodes with HEAD/TAIL labels, hash field tables, set pills)
-- **Mutation flash** - new keys pulse green, modified keys pulse yellow, deleted keys dissolve
-- **Key Inspector** - click any card to expand TTL, encoding, size estimate, raw value, and a Delete action
-- **Command timeline** - full history of commands with before/after snapshots and one-click replay
-
-### Structure Visualizer
-- **Live execution trace** - four-stage pipeline (INPUT → INTERPRET → DELTA → VISUALIZE) pulses in real time as commands run
-- **WRONGTYPE banner** - when a type mismatch occurs, a dismissible error banner explains exactly what went wrong and why it matters in production
-- **Structure blocks** - STRING, LIST, HASH, SET rendered as diagram nodes with connection arrows, HEAD/TAIL markers, and field tables
-
-### Experiment Library
-**10 guided experiments** that teach Redis through discovery, not instruction:
-
-| # | Question | Concepts |
-|---|---|---|
-| 01 | What happens when a key is overwritten? | Strings, SET |
-| 02 | Can data disappear automatically? | TTL, EXPIRE |
-| 03 | Can Redis behave like a queue? | Lists, LPUSH, RPOP, FIFO |
-| 04 | Can Redis behave like a stack? | Lists, LPUSH, LPOP, LIFO |
-| 05 | Why are duplicates ignored? | Sets, SADD, Uniqueness |
-| 06 | How can Redis store objects? | Hashes, HSET, HGET |
-| 07 | What happens with a WRONGTYPE error? | Type Safety, Errors |
-| 08 | Why is Redis used for caching? | Caching, TTL, Patterns |
-| 09 | DEL vs overwrite - what is the difference? | DEL, SET, Keyspace |
-| 10 | What does Redis return for missing keys? | GET, EXISTS, nil |
-
-Each experiment follows a structured flow: **Question → Hypothesis → Experiment → Observation → Reflection**. A live structure visualizer updates as you type commands, and verification steps track your progress through the module.
-
-### Sandbox Scenarios
-Switch between pre-seeded database scenarios from the top navigation:
-
-- **Default / Empty** - clean slate for manual exploration
-- **Populated: E-Commerce** - realistic keyspace with session tokens, product hashes, shopping carts, an order queue, active users set, and rate-limit counters with live TTLs
-- **Chaos / Heavy Load** - 50+ keys across `tmp:`, `metric:`, and `session:` namespaces with volatile TTLs (5–60s), simulating a production system under pressure
+![Redis Live demo](./media/demo.gif)
 
 ---
 
 ## Getting Started
 
-### Prerequisites
+Install Redis Live from the banner above or search for it in the Extensions sidebar.
 
-- [Node.js](https://nodejs.org/) 18+
-- [Redis](https://redis.io/docs/getting-started/) 7+ running locally on port `6379`
+If Redis is running locally, the extension connects automatically on startup — nothing to configure. For cloud instances (Upstash, Redis Cloud, Railway), press `Ctrl+Shift+P` → `Redis Live: Add Connection` and paste your `rediss://` URL.
 
-The fastest way to get Redis running locally:
-```bash
-# Docker (recommended)
-docker run -d -p 6379:6379 redis:7-alpine
+**No local Redis?** Get a free instance at [Upstash](https://upstash.com) in under 2 minutes and paste the URL. Works immediately over TLS.
 
-# macOS (Homebrew)
-brew install redis && brew services start redis
-
-# Ubuntu/Debian
-sudo apt install redis-server && sudo systemctl start redis
-```
-
-### Installation
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/yourusername/redis-state-explorer.git
-cd redis-state-explorer
-
-# 2. Install backend dependencies
-cd backend
-npm install
-
-# 3. Install frontend dependencies
-cd ../frontend
-npm install
-```
-
-### Running
-
-You need two terminals.
-
-**Terminal 1 - Backend:**
-```bash
-cd backend
-npm run dev
-# Starts on http://localhost:3000
-# Expected: "Connected to Redis" + "RSE backend running on http://localhost:3000"
-```
-
-**Terminal 2 - Frontend:**
-```bash
-cd frontend
-npm run dev
-# Starts on http://localhost:5173
-```
-
-Open `http://localhost:5173` in your browser.
-
-### Verifying the connection
-
-Once both servers are running, click **Launch Lab** from the landing page. Type `SET user John` in the terminal panel and press Enter. The `user` key should appear as a STRING card in the state panel within 2 seconds, flashing green.
-
-If the state panel shows "Keyspace is empty" and commands produce network errors, confirm Redis is running on port `6379`.
+**No backend server required.** Redis Live connects directly to Redis using `ioredis`, built into the extension.
 
 ---
 
-## Architecture
+## The terminal
 
-See [`ARCHITECTURE.md`](ARCHITECTURE.md) for a detailed breakdown of the component tree, data flow, and design decisions.
+Type any Redis command directly in the sidebar. All 200+ commands are supported — SET, GET, HSET, ZADD, XADD, SCAN, everything. Commands are syntax-highlighted as you type, with distinct colors for keywords, keys, values, numbers, and flags.
 
-**High-level overview:**
+Press `⌨` to open the command reference — a searchable list of every Redis command, organized by category. Click any command to insert it into the input with your cursor positioned at the first argument.
 
-```
-Browser
-  └── React App (Vite, TypeScript, plain CSS)
-        ├── Shell (tab-state router - no React Router)
-        ├── TopNavBar / SideNavBar
-        ├── LandingPage
-        ├── LabWorkspace
-        │     ├── CommandConsole (syntax-highlighted terminal)
-        │     ├── StateViewer (type-aware cards + Key Inspector)
-        │     ├── DiffPanel (mutation diff)
-        │     └── TimelinePanel (command history + replay)
-        ├── VisualizerPage (structure canvas + execution trace)
-        └── ExperimentPage (library picker + guided runner)
-
-Express API (Node.js, TypeScript)
-  └── POST /execute   - runs a Redis command, returns result
-  └── GET  /state     - returns full keyspace as typed RedisEntry objects
-
-Redis (local or managed)
-```
+Arrow keys navigate your command history. Tab fills the input from history without committing, so you can use previous commands as templates.
 
 ---
 
-## Repository Structure
+## The state panel
 
-```
-redis-state-explorer/
-├── backend/
-│   └── src/
-│       ├── index.ts              # Express app entry
-│       ├── redis.ts              # Redis client
-│       ├── routes/execute.ts     # POST /execute, GET /state
-│       └── services/redisService.ts  # Redis operations + state extraction
-├── frontend/
-│   └── src/
-│       ├── components/
-│       │   ├── Navigation/       # TopNavBar, SideNavBar
-│       │   ├── Layout/           # Shell (tab-state router)
-│       │   ├── CommandConsole.tsx
-│       │   ├── StateViewer.tsx
-│       │   ├── DiffPanel.tsx
-│       │   ├── TimelinePanel.tsx
-│       │   └── KeyInspector.tsx
-│       ├── pages/
-│       │   ├── LandingPage.tsx
-│       │   ├── LabWorkspace.tsx
-│       │   ├── VisualizerPage.tsx
-│       │   └── ExperimentPage.tsx
-│       ├── hooks/useRedisState.ts  # All live state, polling, diff, replay
-│       ├── services/diffEngine.ts  # Snapshot diff computation
-│       ├── utils/
-│       │   ├── parseCommand.ts     # Command parser
-│       │   └── syntaxHighlight.tsx # Token colorizer
-│       ├── data/experiments.ts     # 10 experiment definitions
-│       └── types/index.ts          # Shared TypeScript types
-├── docs/
-│   ├── assets/                   # Screenshots and demo GIF
-│   ├── ARCHITECTURE.md
-│   └── ROADMAP.md
-├── README.md
-└── LICENSE
-```
+Below the terminal, a live view of every key in your Redis instance. Keys update automatically — no manual refresh, no polling indicator to dismiss. When a key is added it flashes green. When it's modified it flashes yellow.
+
+Click any key to expand it and see its full value inline — strings, lists, hashes, sets, sorted sets, and streams all rendered natively in their own format. Type a glob pattern to filter the list instantly (`user:*`, `session:*`, `cache:*`).
 
 ---
 
-## Tech Stack
+## The diff timeline
 
-| Layer | Technology |
-|---|---|
-| Frontend | React 19, TypeScript, Vite |
-| Styling | Plain CSS (design system in `App.css`) |
-| Backend | Node.js, Express, TypeScript |
-| Data Layer | Redis 7 |
-| Icons | Material Symbols Outlined |
-| Fonts | IBM Plex Sans (UI), JetBrains Mono (data) |
+Every change to your Redis state is recorded in a timeline. Commands you ran yourself are labeled with the command text. Changes made by other processes — your application running in another terminal, a background job, a colleague on the same instance — show up as external changes. You always know what changed, when, and what caused it.
 
 ---
 
-## Roadmap
+## Save-diff
 
-See [`ROADMAP.md`](ROADMAP.md) for the full breakdown.
+This is the feature that makes Redis Live different from every other Redis tool.
 
-**Current milestone:** Public deployment + screenshots + demo GIF
+When you save a file, Redis Live captures a snapshot of your Redis state before and after. The diff timeline shows exactly which keys changed as a result of that save. If your code sets three keys and updates two others, you'll see all five appear in the timeline the moment you hit save.
 
-**Up next:**
-- Production deployment (Railway / Render / Fly.io)
-- Pub/Sub visualization
-- Streams visualization
-- Redis persistence and eviction policy simulations
+No other Redis extension connects your code saves to your Redis state changes.
 
 ---
 
-## Contributing
+## Code detective
 
-Contributions are welcome. RSE is early-stage and there are many surfaces to improve.
+Open any source file that uses a Redis client — Node.js (`client.get()`, `redis.set()`), Python (`r.get()`, `redis.set()`) — and Redis Live scans it for key references. Matching keys in your state panel are highlighted with a blue indicator. Click `⟨/⟩` on any highlighted key to jump directly to the line in your code that references it.
 
-**Good first contributions:**
-- Add more experiments to `frontend/src/data/experiments.ts` (follow the existing `Experiment` type)
-- Improve syntax highlighting for additional Redis commands in `frontend/src/utils/syntaxHighlight.tsx`
-- Report bugs or UX issues via [GitHub Issues](https://github.com/yourusername/redis-state-explorer/issues)
-- Add support for additional Redis commands in `backend/src/routes/execute.ts`
+---
 
-**Before submitting a PR:**
-```bash
-# Frontend type check
-cd frontend && npx tsc --noEmit
+## Multiple connections and TLS
 
-# Backend type check
-cd backend && npx tsc --noEmit
-```
+Save named connection profiles (local, staging, prod) and switch between them from the command palette. Supports `redis://` for local instances and `rediss://` for TLS-encrypted cloud instances.
 
-There are no other required tests at this stage.
+---
+
+## Requirements
+
+- VS Code 1.85.0 or later
+- A Redis instance — local, Docker, or cloud
 
 ---
 
 ## License
 
-MIT License - see [`LICENSE`](LICENSE) for details.
+MIT# Redis Live
+
+**Live Redis state updates in under 1 second. See exactly what your code changed, in real time.**
+
+Terminal, key explorer, diff timeline, and code detective in one sidebar panel. Supports TLS, multiple connections, and all Redis data types. No backend server required.
+
+> **No local Redis?** Get a free instance at [Upstash](https://upstash.com) in 2 minutes and paste the URL. Works immediately.
 
 ---
 
-## Author
+## Why Redis Live?
 
-**Aditya P. S.**
+Every other Redis extension for VS Code was built between 2018 and 2021 and has been abandoned since. They show you keys. They don't show you *what changed*.
 
-Building tools for systems, infrastructure, and learning through experimentation.
+Redis Live is built for the workflow that actually matters: **you write code, you run it, and you need to see what it did to Redis, without leaving VS Code.**
 
-<p>
-  <a href="https://www.linkedin.com/company/redis-state-explorer">LinkedIn</a> ·
-  <a href="https://github.com/ps-aditya/redis-state-explorer">GitHub</a>
-</p>
+---
+
+## Features
+
+### ⚡ Live state panel
+All your Redis keys, updating automatically in real time. Keys flash green when added, yellow when modified. No manual refresh. No browser tab. Just your keys, right there.
+
+### 🖥 Terminal with syntax highlighting
+Type any Redis command directly in the sidebar. All 200+ commands supported. Commands are color-coded as you type - keywords, keys, values, numbers, and flags each get their own color.
+
+```
+❯ SET session:abc "user:john" EX 3600
+"OK"
+12ms
+
+❯ HSET cart:john items "product:1001" total 89.99
+2
+8ms
+```
+
+### 📊 Diff timeline
+Every Redis state change is recorded. Commands you ran are labeled by name. Changes from other processes show as "external change." See exactly what changed, when, and how many keys were affected.
+
+### 💾 Save-diff - the feature nobody else has
+Save a file → Redis Live captures your Redis state before and after → shows exactly which keys your code changed as a result. No other tool on earth connects your code saves to your Redis state changes. This is the feature that makes Redis Live irreplaceable once you've used it.
+
+### 🔍 Code detective
+Open any file using a Redis client and Redis Live highlights the matching keys in your state panel. Click `⟨/⟩` to jump to the exact line in your code that references that key.
+
+Supports:
+- Node.js - `client.get()`, `redis.set()`, `ioredis`
+- Python - `r.get()`, `redis.set()`
+
+### 📖 Command reference
+Press `⌨` in the terminal to open a searchable reference of 200+ Redis commands organized by category. Click any command to insert it into the terminal input with your cursor at the first argument.
+
+### 🔗 Multiple connections with TLS
+Save named connection profiles (local, staging, prod). Switch between them from the sidebar. Supports `redis://` for local and `rediss://` for TLS-encrypted cloud instances.
+
+### 🔎 Key filtering
+Type any pattern in the state panel to filter your keys instantly - `user:*`, `session:*`, `cache:*`. Client-side, zero latency.
+
+---
+
+## Getting started
+
+### Zero-config local setup
+
+If Redis is running locally, Redis Live connects automatically on startup. Nothing to configure.
+
+```
+redis://localhost:6379
+```
+
+### With Docker
+
+```bash
+docker run -d -p 6379:6379 redis
+```
+
+Open VS Code - Redis Live connects immediately.
+
+### With a cloud instance (no local install needed)
+
+1. Sign up free at [Upstash](https://upstash.com) or [Redis Cloud](https://redis.io/try-free)
+2. Copy your connection URL
+3. Press `Ctrl+Shift+P` → `Redis Live: Add Connection`
+4. Paste your `rediss://` URL
+
+Done. Takes under 2 minutes.
+
+---
+
+## Connection URL format
+
+```
+redis://[:password@]host[:port][/database]
+rediss://[:password@]host[:port][/database]   ← TLS (cloud instances)
+```
+
+**Examples:**
+```
+redis://localhost:6379
+redis://:mypassword@localhost:6379/0
+rediss://default:token@my-instance.upstash.io:6380
+```
+
+---
+
+## Commands
+
+| Command | What it does |
+|---|---|
+| `Redis Live: Connect…` | Connect to Redis or switch between saved profiles |
+| `Redis Live: Add Connection…` | Save a new named connection profile |
+| `Redis Live: Open Panel` | Open the Redis Live sidebar |
+| `Redis Live: Configure` | Open extension settings |
+
+---
+
+## Supported data types
+
+| Type | What you see |
+|---|---|
+| String | Full value, inline |
+| List | Item count + all items |
+| Hash | Field count + all field→value pairs |
+| Set | Member count + all members |
+| Sorted Set | Member count + score→member pairs |
+| Stream | Entry count + entry IDs and field-value pairs |
+
+---
+
+## Settings
+
+| Setting | Default | Description |
+|---|---|---|
+| `redis-state-explorer.redisUrl` | `redis://localhost:6379` | Default Redis connection URL |
+| `redis-state-explorer.pollInterval` | `1000` | How often to refresh state (ms) |
+| `redis-state-explorer.enabled` | `true` | Enable or disable the extension |
+
+---
+
+## Perfect for
+
+- **Debugging** Redis-connected Node.js, Python, and Go applications
+- **Learning** Redis data structures - run a command, watch the state change instantly
+- **Understanding** what your code actually does to Redis, without guessing
+- **Teams** who want to see Redis state during code review or pair programming
+- **Students** studying NoSQL databases who want a live feedback loop
+
+---
+
+## Requirements
+
+- VS Code 1.85.0 or later
+- A running Redis instance - local, Docker, or cloud
+
+**No backend server required.** Redis Live connects directly to Redis using the battle-tested `ioredis` client, built into the extension. Nothing to install, nothing to run.
+
+---
+
+## Why not the others?
+
+| | Redis Live | Competitors |
+|---|---|---|
+| Live state updates | ✅ Under 1 second | ❌ Manual refresh only |
+| Diff timeline | ✅ Every change recorded | ❌ Not available |
+| Save-diff | ✅ Code → Redis causality | ❌ Not available |
+| Terminal | ✅ All 200+ commands, highlighted | ❌ Partial or none |
+| TLS / cloud Redis | ✅ `rediss://` built in | ⚠️ 2 of 9 competitors |
+| Last updated | ✅ 2026 | ❌ 2018–2021, abandoned |
+
+---
+
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for full release history.
+
+---
+
+## License
+
+MIT
