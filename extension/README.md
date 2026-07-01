@@ -1,5 +1,84 @@
 # Redis Live
 
+**See exactly what your code does to Redis, without leaving VS Code.**
+
+Redis Live is a VS Code extension that connects directly to your Redis instance and shows you what's happening inside it in real time. Run a command, watch the key appear. Save a file, see which keys changed as a result. Every mutation tracked, every change visible, all inside the sidebar.
+
+Built in 2026. Actively maintained.
+
+![Redis Live demo](./media/demo.gif)
+
+---
+
+## Getting Started
+
+Install Redis Live from the banner above or search for it in the Extensions sidebar.
+
+If Redis is running locally, the extension connects automatically on startup — nothing to configure. For cloud instances (Upstash, Redis Cloud, Railway), press `Ctrl+Shift+P` → `Redis Live: Add Connection` and paste your `rediss://` URL.
+
+**No local Redis?** Get a free instance at [Upstash](https://upstash.com) in under 2 minutes and paste the URL. Works immediately over TLS.
+
+**No backend server required.** Redis Live connects directly to Redis using `ioredis`, built into the extension.
+
+---
+
+## The terminal
+
+Type any Redis command directly in the sidebar. All 200+ commands are supported — SET, GET, HSET, ZADD, XADD, SCAN, everything. Commands are syntax-highlighted as you type, with distinct colors for keywords, keys, values, numbers, and flags.
+
+Press `⌨` to open the command reference — a searchable list of every Redis command, organized by category. Click any command to insert it into the input with your cursor positioned at the first argument.
+
+Arrow keys navigate your command history. Tab fills the input from history without committing, so you can use previous commands as templates.
+
+---
+
+## The state panel
+
+Below the terminal, a live view of every key in your Redis instance. Keys update automatically — no manual refresh, no polling indicator to dismiss. When a key is added it flashes green. When it's modified it flashes yellow.
+
+Click any key to expand it and see its full value inline — strings, lists, hashes, sets, sorted sets, and streams all rendered natively in their own format. Type a glob pattern to filter the list instantly (`user:*`, `session:*`, `cache:*`).
+
+---
+
+## The diff timeline
+
+Every change to your Redis state is recorded in a timeline. Commands you ran yourself are labeled with the command text. Changes made by other processes — your application running in another terminal, a background job, a colleague on the same instance — show up as external changes. You always know what changed, when, and what caused it.
+
+---
+
+## Save-diff
+
+This is the feature that makes Redis Live different from every other Redis tool.
+
+When you save a file, Redis Live captures a snapshot of your Redis state before and after. The diff timeline shows exactly which keys changed as a result of that save. If your code sets three keys and updates two others, you'll see all five appear in the timeline the moment you hit save.
+
+No other Redis extension connects your code saves to your Redis state changes.
+
+---
+
+## Code detective
+
+Open any source file that uses a Redis client — Node.js (`client.get()`, `redis.set()`), Python (`r.get()`, `redis.set()`) — and Redis Live scans it for key references. Matching keys in your state panel are highlighted with a blue indicator. Click `⟨/⟩` on any highlighted key to jump directly to the line in your code that references it.
+
+---
+
+## Multiple connections and TLS
+
+Save named connection profiles (local, staging, prod) and switch between them from the command palette. Supports `redis://` for local instances and `rediss://` for TLS-encrypted cloud instances.
+
+---
+
+## Requirements
+
+- VS Code 1.85.0 or later
+- A Redis instance — local, Docker, or cloud
+
+---
+
+## License
+
+MIT# Redis Live
+
 **Live Redis state updates in under 1 second. See exactly what your code changed, in real time.**
 
 Terminal, key explorer, diff timeline, and code detective in one sidebar panel. Supports TLS, multiple connections, and all Redis data types. No backend server required.
