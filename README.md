@@ -1,5 +1,4 @@
-# Redis State Explorer
-
+# Redis Live
 **See exactly what your code does to Redis, without leaving VS Code.**
 
 Redis State Explorer is a VS Code extension that connects directly to your Redis instance and shows you what's happening inside it in real time. Run a command, watch the key appear. Save a file, see which keys changed as a result. Every mutation tracked, every change visible, all inside the sidebar.
